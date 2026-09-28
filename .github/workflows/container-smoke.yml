@@ -38,6 +38,12 @@ jobs:
       - name: Check review-only HTTP contract in container
         shell: bash
         run: |
+          docker run --rm --entrypoint sh massive-intent-review:ci -c '
+          test -s /app/LICENSE && test -s /app/NOTICE &&
+          test -s /app/attribution/MASSIVE-LICENSE.txt &&
+          test -s /app/attribution/MASSIVE-NOTICE.md &&
+          test ! -e /app/data/raw && test ! -e /app/reports
+          '
           docker run -d --name massive-ci -p 127.0.0.1:8765:8765 massive-intent-review:ci
           trap 'docker logs massive-ci; docker rm -f massive-ci' EXIT
           for attempt in {1..30}; do
