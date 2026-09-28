@@ -100,6 +100,14 @@ python scripts\compare_massive.py --gold data\massive-zh\test.jsonl --base repor
 
 结果文件：[最终 test 比较](reports/massive-test-comparison.json)、[SFT dev 比较](reports/massive-dev-comparison.json)、[DPO dev 比较](reports/massive-dpo-dev-comparison.json)。
 
+## 下一轮 SFT 研究
+
+人工复核服务先使用已验证的线性模型；Qwen SFT/DPO 留在研究轨道。官方 test 已用于以上实验和线性基线确认，后续调参不能再把它称作全新盲测，也不能根据其结果选择训练配置。
+
+下一轮先在官方 train 内按归一化文本分组，固定种子留出从未用于本轮训练和模型选择的评测组；对比模型须从同一剩余训练组重新训练。开发阶段只用去除训练文本重复后的 dev 来选择 SFT 数据量、抽样方式和训练步数，并同时报告逐类支持数、macro-F1、准确率及训练成本。与同训练组重训的线性基线配对比较后，再对留出组做一次冻结模型的确认。真正面向用户前还需取得授权清楚的新场景语句，加入未知意图、歧义和噪声，独立评估拒判与误判成本。
+
+DPO 只有在 SFT 已稳定改善、偏好对的来源和错误类型可解释、且开发集预设门槛通过时才继续；否则记录负结果，不把 DPO 当作必需的上线步骤。小模型服务始终保留人工复核标志，研究结论不直接切换线上后端。
+
 ## 来源与署名
 
 - [MASSIVE 数据集卡与许可](https://huggingface.co/datasets/AmazonScience/massive)
