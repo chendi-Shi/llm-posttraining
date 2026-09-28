@@ -1,0 +1,3 @@
+{"prompt":[{"role":"user","content":"用两句话解释什么是过拟合。"}],"completion":[{"role":"assistant","content":"过拟合是模型把训练样本中的细节甚至噪声也记住了。它在训练数据上表现很好，但遇到新数据时表现变差。"}]}
+{"prompt":[{"role":"user","content":"把下面这句话改写得更简洁：由于天气状况不佳，因此本次活动决定延期举行。"}],"completion":[{"role":"assistant","content":"因天气不佳，活动延期举行。"}]}
+{"prompt":[{"role":"user","content":"用 JSON 返回一个表示成功状态的对象，字段为 status 和 ok。"}],"completion":[{"role":"assistant","content":"{\"status\":\"success\",\"ok\":true}"}]}

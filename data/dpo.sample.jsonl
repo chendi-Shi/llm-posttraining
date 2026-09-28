@@ -1,0 +1,3 @@
+{"prompt":[{"role":"user","content":"解释什么是开源软件。"}],"chosen":[{"role":"assistant","content":"开源软件会公开其源代码，并按许可证允许用户查看、使用或修改。具体权限取决于该软件采用的许可证。"}],"rejected":[{"role":"assistant","content":"开源软件就是完全免费，任何人都能随意使用和销售。"}]}
+{"prompt":[{"role":"user","content":"请把 3 公里换算成米。"}],"chosen":[{"role":"assistant","content":"3 公里 = 3,000 米。"}],"rejected":[{"role":"assistant","content":"3 公里大约是 300 米。"}]}
+{"prompt":[{"role":"user","content":"用一句话说明 DPO 的用途。"}],"chosen":[{"role":"assistant","content":"DPO 使用偏好回答对直接调整模型，使模型更倾向于生成被选中的回答。"}],"rejected":[{"role":"assistant","content":"DPO 是一种压缩算法，可以把模型参数变少。"}]}
