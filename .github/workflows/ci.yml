@@ -1,0 +1,24 @@
+name: Code checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Compile project scripts
+        run: python -m compileall -q scripts tests
+      - name: Check public release contents
+        run: python scripts/check_release_tree.py
+      - name: Run offline service contract tests
+        run: python -m unittest discover -s tests -p 'test_serve_massive.py' -v
