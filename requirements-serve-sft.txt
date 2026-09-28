@@ -1,0 +1,8 @@
+# Optional SFT backend only. Install compatible CPU PyTorch separately;
+# the verified local environment uses torch 2.14.0+cpu on Python 3.10.
+accelerate==1.15.0
+bitsandbytes==0.50.2
+peft==0.21.0
+safetensors==0.8.0
+tokenizers==0.23.2
+transformers==5.17.0

@@ -1,0 +1,11 @@
+# Only the code and locked serving dependencies needed by the Docker build.
+# Raw data, local artifacts, reports, secrets, and the surrounding workspace
+# must never enter the Docker build context.
+**
+!Dockerfile
+!requirements-serve.txt
+!scripts/
+!scripts/evaluate_massive_linear.py
+!scripts/massive_linear_text.py
+!scripts/massive_metrics.py
+!scripts/serve_massive.py

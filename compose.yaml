@@ -1,0 +1,21 @@
+services:
+  intent-review:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+      args:
+        EXPECTED_MODEL_SHA256: ${EXPECTED_MODEL_SHA256:-fa9f1cb3c72496060492703087eb1a5fb558e35d276e4049cd81fefbe07fe13e}
+    image: massive-intent-review:local
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,noexec,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "127.0.0.1:8765:8765"
+    stop_grace_period: 30s
