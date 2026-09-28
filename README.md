@@ -10,7 +10,7 @@
 
 线性模型在排除与完整 train/dev 相同文本的 2,727 条 test 上，准确率为 **82.80%**、macro-F1 为 **77.99%**。同一官方 test 此前已用于 SFT 研究，因此这个结果是锁定模型的确认，不能称为全新盲测。模型仍缺真实请求、未知意图、逐类充分样本及拒判校准，不能自动执行用户指令。详细证据见[线性基线测试摘要](reports/massive-linear-test-summary.md)和[发布与上线验收](RELEASE_READINESS.md)。
 
-从官方 MASSIVE 1.0 归档重建线性模型后，可按[服务运行说明](SERVICE_RUNBOOK.md)启动本地接口；[数据与模型许可](DATA_AND_MODEL_LICENSES.md)说明来源和署名。[云服务器部署说明](CLOUD_DEPLOY.md)记录容器构建和访问边界。
+从官方 MASSIVE 1.0 归档重建线性模型后，可按[服务运行说明](SERVICE_RUNBOOK.md)启动本地接口；原创代码和文档采用 [Apache 2.0](LICENSE)，[数据与模型许可](DATA_AND_MODEL_LICENSES.md)说明第三方来源和署名。[云服务器部署说明](CLOUD_DEPLOY.md)记录容器构建和访问边界。当前尚无云服务器和对外服务地址。
 
 ## 当前实验：中文语音助理意图分类
 

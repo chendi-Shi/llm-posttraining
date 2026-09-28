@@ -70,6 +70,7 @@ RUN set -eu; \
 
 FROM runtime-base AS runtime
 
+COPY LICENSE NOTICE /app/
 COPY scripts/serve_massive.py scripts/massive_linear_text.py /app/scripts/
 COPY --from=verified /app/outputs/massive-linear-baseline.joblib /app/outputs/massive-linear-baseline.joblib
 COPY --from=verified /app/MODEL_SHA256 /app/MODEL_SHA256

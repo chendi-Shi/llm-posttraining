@@ -4,13 +4,13 @@
 
 ## 包内内容与来源
 
-Docker 构建从 [Amazon Science 官方 MASSIVE 1.0 归档](https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.0.tar.gz)下载数据，校验 SHA-256 `7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8`，再运行 `scripts/evaluate_massive_linear.py`。构建会确认选中的候选是 `char_1_3`、训练报告没有使用 test，并核对模型文件哈希。训练阶段可供审计；最终运行镜像只复制约 11 MB 的模型、线性服务代码及官方数据许可和署名文件，不含原始数据、测试文本、开发集报告或 Qwen 权重。
+Docker 构建从 [Amazon Science 官方 MASSIVE 1.0 归档](https://amazon-massive-nlu-dataset.s3.amazonaws.com/amazon-massive-dataset-1.0.tar.gz)下载数据，校验 SHA-256 `7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8`，再运行 `scripts/evaluate_massive_linear.py`。构建会确认选中的候选是 `char_1_3`、训练报告没有使用 test，并核对模型文件哈希。训练阶段可供审计；最终运行镜像只复制约 11 MB 的模型、线性服务代码、项目 Apache 2.0 许可与 NOTICE、官方数据许可和署名文件，不含原始数据、测试文本、开发集报告或 Qwen 权重。
 
 MASSIVE 数据采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)；构建从官方归档中提取 `LICENSE` 和 `NOTICE.md`，放在镜像 `/app/attribution/`，另说明本项目的模型训练用途。详见[项目数据与模型许可说明](DATA_AND_MODEL_LICENSES.md)。
 
 ## 从干净检出审计构建
 
-需要 Linux 主机、Docker Engine、Docker Compose v2，以及构建时可访问官方数据下载地址和 Python 包源。本项目应是独立检出目录，且本地 Docker 构建上下文已由 `.dockerignore` 限定为五个脚本、Dockerfile 和线性后端固定依赖。
+需要 Linux 主机、Docker Engine、Docker Compose v2，以及构建时可访问官方数据下载地址和 Python 包源。本项目应是独立检出目录，且本地 Docker 构建上下文已由 `.dockerignore` 限定为五个脚本、Dockerfile、项目许可文件和线性后端固定依赖。
 
 先构建**仅用于审计、不可作为服务镜像发布**的 `trained` 阶段：
 

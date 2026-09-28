@@ -1,0 +1,17 @@
+llm-posttraining
+Copyright 2026 chendi-Shi
+
+The original project code and documentation are licensed under the Apache
+License, Version 2.0; see the root LICENSE file.
+
+Third-party materials have separate licenses. MASSIVE 1.0 zh-CN data is
+copyright Amazon.com, Inc. or its affiliates and licensed under CC BY 4.0.
+The dataset was localized from SLURP. See DATA_AND_MODEL_LICENSES.md for
+source, attribution, and modification details. No MASSIVE text is included
+in this repository; the deployment build fetches the official archive and
+places its LICENSE and NOTICE.md in the serving image.
+
+Qwen2.5-0.5B-Instruct is licensed by its upstream owner under Apache 2.0.
+Its upstream license and copyright statement are reproduced in
+licenses/Qwen2.5-0.5B-Instruct-LICENSE. Model weights and adapters are not
+included in this repository.

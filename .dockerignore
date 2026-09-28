@@ -3,6 +3,8 @@
 # must never enter the Docker build context.
 **
 !Dockerfile
+!LICENSE
+!NOTICE
 !requirements-serve.txt
 !scripts/
 !scripts/evaluate_massive_linear.py
