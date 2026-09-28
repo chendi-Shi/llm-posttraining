@@ -1,0 +1,63 @@
+name: Container smoke
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Rebuild model from verified source
+        run: docker build --target trained -t massive-intent-review:trained .
+      - name: Check training report and build serving image
+        shell: bash
+        run: |
+          docker run --rm --entrypoint python massive-intent-review:trained -c '
+          import json
+          report = json.load(open("/app/reports/massive-linear-dev.json", encoding="utf-8"))
+          assert report["source_sha256"] == "7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8"
+          assert report["test_used"] is False
+          assert report["selected_candidate"] == "char_1_3"
+          selected = next(item for item in report["candidates"] if item["name"] == "char_1_3")
+          clean = selected["phrase_disjoint_dev"]
+          assert clean["examples"] == 1889, clean
+          assert clean["accuracy"] >= 0.81, clean
+          assert clean["macro_f1"] >= 0.78, clean
+          print("Clean dev:", clean["examples"], clean["accuracy"], clean["macro_f1"])
+          '
+          model_hash="$(docker run --rm --entrypoint sha256sum massive-intent-review:trained /app/outputs/massive-linear-baseline.joblib | cut -d ' ' -f 1)"
+          [[ "$model_hash" =~ ^[0-9a-f]{64}$ ]]
+          echo "CI rebuilt model SHA-256: $model_hash"
+          docker build --target runtime --build-arg EXPECTED_MODEL_SHA256="$model_hash" -t massive-intent-review:ci .
+      - name: Check review-only HTTP contract in container
+        shell: bash
+        run: |
+          docker run -d --name massive-ci -p 127.0.0.1:8765:8765 massive-intent-review:ci
+          trap 'docker logs massive-ci; docker rm -f massive-ci' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/health/ready > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --show-error http://127.0.0.1:8765/health/ready
+          python3 -c '
+          import json, urllib.request
+          body = json.dumps({"text": "明天天气如何"}, ensure_ascii=False).encode("utf-8")
+          request = urllib.request.Request(
+              "http://127.0.0.1:8765/v1/intents", body,
+              {"Content-Type": "application/json"}, method="POST"
+          )
+          with urllib.request.urlopen(request, timeout=10) as response:
+              result = json.load(response)
+          assert result["intent"] is None, result
+          assert result["candidate_intent"] == "weather_query", result
+          assert result["abstained"] is True, result
+          assert result["review_required"] is True, result
+          assert result["auto_execute"] is False, result
+          print(result)
+          '
