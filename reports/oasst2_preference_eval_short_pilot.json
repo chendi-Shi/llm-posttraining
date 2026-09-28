@@ -1,0 +1,39 @@
+{
+  "dataset": "OpenAssistant/oasst2",
+  "split": "validation",
+  "revision": "179dd21fc55192153d94adb0e0ce8f69e222bf75",
+  "evaluation_pairs": 33,
+  "max_sequence_tokens": 256,
+  "evaluation_seed": 20260924,
+  "evaluation_sha256": "7122443157659b3b0c853bb3269571a46e4d8d283c5cd99b8fadfc7c0ffdcf37",
+  "model": "models\\Qwen2.5-0.5B-Instruct",
+  "adapters": {
+    "sft": "outputs\\sft-oasst2-pilot-clean",
+    "dpo": "outputs\\dpo-oasst2-pilot"
+  },
+  "metric_note": "Raw sequence log-probability ranking is a small held-out preference proxy, not a general capability benchmark.",
+  "eval_file": "data\\dpo.eval.jsonl",
+  "results": {
+    "base": {
+      "pairs": 33,
+      "chosen_win_rate_sum_logp": 0.30303030303030304,
+      "chosen_win_rate_mean_token_logp": 0.6060606060606061,
+      "mean_margin_sum_logp": -89.58101004542726,
+      "mean_margin_per_token_logp": 0.8442947666117229
+    },
+    "sft": {
+      "pairs": 33,
+      "chosen_win_rate_sum_logp": 0.30303030303030304,
+      "chosen_win_rate_mean_token_logp": 0.6060606060606061,
+      "mean_margin_sum_logp": -89.41241522268815,
+      "mean_margin_per_token_logp": 0.8135910145837497
+    },
+    "dpo": {
+      "pairs": 33,
+      "chosen_win_rate_sum_logp": 0.30303030303030304,
+      "chosen_win_rate_mean_token_logp": 0.6060606060606061,
+      "mean_margin_sum_logp": -89.3475360436873,
+      "mean_margin_per_token_logp": 0.8179383913887861
+    }
+  }
+}

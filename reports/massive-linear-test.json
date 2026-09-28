@@ -1,0 +1,904 @@
+{
+  "task": "MASSIVE 1.0 zh-CN intent classification",
+  "evaluation_status": "locked-model test confirmation; not a pristine blind test",
+  "prior_test_disclosure": "The same official test split was previously viewed in the SFT study. This evaluation confirms the frozen linear baseline; it does not constitute a fully unseen final test. No training, candidate changes, or threshold tuning were performed here.",
+  "source_archive": "data\\raw\\amazon-massive-dataset-1.0.tar.gz",
+  "source_sha256": "7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8",
+  "split_sizes": {
+    "train": 11514,
+    "dev": 2033,
+    "test": 2974
+  },
+  "model_file": "outputs\\massive-linear-baseline.joblib",
+  "locked_model_sha256": "fa9f1cb3c72496060492703087eb1a5fb558e35d276e4049cd81fefbe07fe13e",
+  "model_bytes": 11180878,
+  "dev_selection_report": "reports\\massive-linear-dev.json",
+  "duplicate_audit": {
+    "test_rows_with_exact_train_text": 223,
+    "test_rows_with_exact_dev_text": 55,
+    "test_rows_with_exact_train_or_dev_text": 247,
+    "test_rows_with_normalized_train_text": 223,
+    "test_rows_with_normalized_dev_text": 55,
+    "test_rows_with_normalized_train_or_dev_text": 247,
+    "phrase_disjoint_test_rows": 2727,
+    "phrase_disjoint_test_intent_classes": 59
+  },
+  "full_test": {
+    "examples": 2974,
+    "scored_intent_classes": 59,
+    "accuracy": 0.8375924680564896,
+    "macro_f1": 0.7929707885395204,
+    "per_intent": {
+      "alarm_query": {
+        "support": 34,
+        "precision": 0.967741935483871,
+        "recall": 0.8823529411764706,
+        "f1": 0.923076923076923
+      },
+      "alarm_remove": {
+        "support": 21,
+        "precision": 0.8181818181818182,
+        "recall": 0.8571428571428571,
+        "f1": 0.8372093023255814
+      },
+      "alarm_set": {
+        "support": 41,
+        "precision": 0.9069767441860465,
+        "recall": 0.9512195121951219,
+        "f1": 0.9285714285714286
+      },
+      "audio_volume_down": {
+        "support": 11,
+        "precision": 0.9090909090909091,
+        "recall": 0.9090909090909091,
+        "f1": 0.9090909090909091
+      },
+      "audio_volume_mute": {
+        "support": 32,
+        "precision": 0.8235294117647058,
+        "recall": 0.875,
+        "f1": 0.8484848484848485
+      },
+      "audio_volume_other": {
+        "support": 6,
+        "precision": 0.75,
+        "recall": 0.5,
+        "f1": 0.6
+      },
+      "audio_volume_up": {
+        "support": 13,
+        "precision": 0.8181818181818182,
+        "recall": 0.6923076923076923,
+        "f1": 0.7500000000000001
+      },
+      "calendar_query": {
+        "support": 126,
+        "precision": 0.7142857142857143,
+        "recall": 0.753968253968254,
+        "f1": 0.7335907335907336
+      },
+      "calendar_remove": {
+        "support": 67,
+        "precision": 0.8205128205128205,
+        "recall": 0.9552238805970149,
+        "f1": 0.8827586206896552
+      },
+      "calendar_set": {
+        "support": 209,
+        "precision": 0.8538812785388128,
+        "recall": 0.8947368421052632,
+        "f1": 0.8738317757009345
+      },
+      "cooking_recipe": {
+        "support": 72,
+        "precision": 0.9178082191780822,
+        "recall": 0.9305555555555556,
+        "f1": 0.9241379310344828
+      },
+      "datetime_convert": {
+        "support": 15,
+        "precision": 0.9090909090909091,
+        "recall": 0.6666666666666666,
+        "f1": 0.7692307692307692
+      },
+      "datetime_query": {
+        "support": 88,
+        "precision": 0.82,
+        "recall": 0.9318181818181818,
+        "f1": 0.8723404255319149
+      },
+      "email_addcontact": {
+        "support": 12,
+        "precision": 0.4,
+        "recall": 0.3333333333333333,
+        "f1": 0.3636363636363636
+      },
+      "email_query": {
+        "support": 119,
+        "precision": 0.9322033898305084,
+        "recall": 0.9243697478991597,
+        "f1": 0.9282700421940928
+      },
+      "email_querycontact": {
+        "support": 26,
+        "precision": 0.6774193548387096,
+        "recall": 0.8076923076923077,
+        "f1": 0.7368421052631579
+      },
+      "email_sendemail": {
+        "support": 114,
+        "precision": 0.918918918918919,
+        "recall": 0.8947368421052632,
+        "f1": 0.9066666666666667
+      },
+      "general_greet": {
+        "support": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "general_joke": {
+        "support": 19,
+        "precision": 1.0,
+        "recall": 0.9473684210526315,
+        "f1": 0.972972972972973
+      },
+      "general_quirky": {
+        "support": 169,
+        "precision": 0.656934306569343,
+        "recall": 0.5325443786982249,
+        "f1": 0.5882352941176472
+      },
+      "iot_cleaning": {
+        "support": 26,
+        "precision": 0.9230769230769231,
+        "recall": 0.9230769230769231,
+        "f1": 0.9230769230769231
+      },
+      "iot_coffee": {
+        "support": 36,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "iot_hue_lightchange": {
+        "support": 36,
+        "precision": 0.9090909090909091,
+        "recall": 0.8333333333333334,
+        "f1": 0.8695652173913043
+      },
+      "iot_hue_lightdim": {
+        "support": 21,
+        "precision": 0.8636363636363636,
+        "recall": 0.9047619047619048,
+        "f1": 0.8837209302325582
+      },
+      "iot_hue_lightoff": {
+        "support": 43,
+        "precision": 0.9534883720930233,
+        "recall": 0.9534883720930233,
+        "f1": 0.9534883720930233
+      },
+      "iot_hue_lighton": {
+        "support": 3,
+        "precision": 0.2,
+        "recall": 0.3333333333333333,
+        "f1": 0.25
+      },
+      "iot_hue_lightup": {
+        "support": 27,
+        "precision": 0.8275862068965517,
+        "recall": 0.8888888888888888,
+        "f1": 0.8571428571428572
+      },
+      "iot_wemo_off": {
+        "support": 18,
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1": 0.9090909090909091
+      },
+      "iot_wemo_on": {
+        "support": 10,
+        "precision": 1.0,
+        "recall": 0.7,
+        "f1": 0.8235294117647058
+      },
+      "lists_createoradd": {
+        "support": 39,
+        "precision": 0.9117647058823529,
+        "recall": 0.7948717948717948,
+        "f1": 0.8493150684931507
+      },
+      "lists_query": {
+        "support": 51,
+        "precision": 0.7777777777777778,
+        "recall": 0.8235294117647058,
+        "f1": 0.7999999999999999
+      },
+      "lists_remove": {
+        "support": 52,
+        "precision": 1.0,
+        "recall": 0.6538461538461539,
+        "f1": 0.7906976744186047
+      },
+      "music_dislikeness": {
+        "support": 4,
+        "precision": 0.5,
+        "recall": 0.25,
+        "f1": 0.3333333333333333
+      },
+      "music_likeness": {
+        "support": 36,
+        "precision": 0.7878787878787878,
+        "recall": 0.7222222222222222,
+        "f1": 0.7536231884057971
+      },
+      "music_query": {
+        "support": 35,
+        "precision": 0.9310344827586207,
+        "recall": 0.7714285714285715,
+        "f1": 0.8437500000000001
+      },
+      "music_settings": {
+        "support": 6,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818
+      },
+      "news_query": {
+        "support": 124,
+        "precision": 0.7412587412587412,
+        "recall": 0.8548387096774194,
+        "f1": 0.7940074906367041
+      },
+      "play_audiobook": {
+        "support": 41,
+        "precision": 0.8974358974358975,
+        "recall": 0.8536585365853658,
+        "f1": 0.875
+      },
+      "play_game": {
+        "support": 35,
+        "precision": 0.9142857142857143,
+        "recall": 0.9142857142857143,
+        "f1": 0.9142857142857143
+      },
+      "play_music": {
+        "support": 176,
+        "precision": 0.8088235294117647,
+        "recall": 0.9375,
+        "f1": 0.868421052631579
+      },
+      "play_podcasts": {
+        "support": 63,
+        "precision": 0.9827586206896551,
+        "recall": 0.9047619047619048,
+        "f1": 0.9421487603305785
+      },
+      "play_radio": {
+        "support": 72,
+        "precision": 0.8461538461538461,
+        "recall": 0.7638888888888888,
+        "f1": 0.802919708029197
+      },
+      "qa_currency": {
+        "support": 39,
+        "precision": 0.975,
+        "recall": 1.0,
+        "f1": 0.9873417721518987
+      },
+      "qa_definition": {
+        "support": 57,
+        "precision": 0.8421052631578947,
+        "recall": 0.8421052631578947,
+        "f1": 0.8421052631578947
+      },
+      "qa_factoid": {
+        "support": 141,
+        "precision": 0.7222222222222222,
+        "recall": 0.8297872340425532,
+        "f1": 0.7722772277227723
+      },
+      "qa_maths": {
+        "support": 25,
+        "precision": 0.9565217391304348,
+        "recall": 0.88,
+        "f1": 0.9166666666666666
+      },
+      "qa_stock": {
+        "support": 26,
+        "precision": 0.8,
+        "recall": 0.9230769230769231,
+        "f1": 0.8571428571428571
+      },
+      "recommendation_events": {
+        "support": 43,
+        "precision": 0.7777777777777778,
+        "recall": 0.6511627906976745,
+        "f1": 0.7088607594936709
+      },
+      "recommendation_locations": {
+        "support": 31,
+        "precision": 0.7647058823529411,
+        "recall": 0.8387096774193549,
+        "f1": 0.7999999999999999
+      },
+      "recommendation_movies": {
+        "support": 20,
+        "precision": 0.7368421052631579,
+        "recall": 0.7,
+        "f1": 0.717948717948718
+      },
+      "social_post": {
+        "support": 81,
+        "precision": 0.9452054794520548,
+        "recall": 0.8518518518518519,
+        "f1": 0.8961038961038961
+      },
+      "social_query": {
+        "support": 25,
+        "precision": 0.9047619047619048,
+        "recall": 0.76,
+        "f1": 0.8260869565217391
+      },
+      "takeaway_order": {
+        "support": 22,
+        "precision": 0.7307692307692307,
+        "recall": 0.8636363636363636,
+        "f1": 0.7916666666666666
+      },
+      "takeaway_query": {
+        "support": 35,
+        "precision": 0.96,
+        "recall": 0.6857142857142857,
+        "f1": 0.7999999999999999
+      },
+      "transport_query": {
+        "support": 51,
+        "precision": 0.7551020408163265,
+        "recall": 0.7254901960784313,
+        "f1": 0.74
+      },
+      "transport_taxi": {
+        "support": 23,
+        "precision": 1.0,
+        "recall": 0.9130434782608695,
+        "f1": 0.9545454545454545
+      },
+      "transport_ticket": {
+        "support": 35,
+        "precision": 0.9354838709677419,
+        "recall": 0.8285714285714286,
+        "f1": 0.8787878787878788
+      },
+      "transport_traffic": {
+        "support": 15,
+        "precision": 0.7647058823529411,
+        "recall": 0.8666666666666667,
+        "f1": 0.8125
+      },
+      "weather_query": {
+        "support": 156,
+        "precision": 0.8957055214723927,
+        "recall": 0.9358974358974359,
+        "f1": 0.9153605015673982
+      }
+    },
+    "per_scenario": {
+      "alarm": {
+        "examples": 96,
+        "accuracy": 0.90625
+      },
+      "audio": {
+        "examples": 62,
+        "accuracy": 0.8064516129032258
+      },
+      "calendar": {
+        "examples": 402,
+        "accuracy": 0.8606965174129353
+      },
+      "cooking": {
+        "examples": 72,
+        "accuracy": 0.9305555555555556
+      },
+      "datetime": {
+        "examples": 103,
+        "accuracy": 0.8932038834951457
+      },
+      "email": {
+        "examples": 271,
+        "accuracy": 0.8745387453874539
+      },
+      "general": {
+        "examples": 189,
+        "accuracy": 0.5714285714285714
+      },
+      "iot": {
+        "examples": 220,
+        "accuracy": 0.8954545454545455
+      },
+      "lists": {
+        "examples": 142,
+        "accuracy": 0.7535211267605634
+      },
+      "music": {
+        "examples": 81,
+        "accuracy": 0.6790123456790124
+      },
+      "news": {
+        "examples": 124,
+        "accuracy": 0.8548387096774194
+      },
+      "play": {
+        "examples": 387,
+        "accuracy": 0.8888888888888888
+      },
+      "qa": {
+        "examples": 288,
+        "accuracy": 0.8680555555555556
+      },
+      "recommendation": {
+        "examples": 94,
+        "accuracy": 0.723404255319149
+      },
+      "social": {
+        "examples": 106,
+        "accuracy": 0.8301886792452831
+      },
+      "takeaway": {
+        "examples": 57,
+        "accuracy": 0.7543859649122807
+      },
+      "transport": {
+        "examples": 124,
+        "accuracy": 0.8064516129032258
+      },
+      "weather": {
+        "examples": 156,
+        "accuracy": 0.9358974358974359
+      }
+    }
+  },
+  "phrase_disjoint_test": {
+    "examples": 2727,
+    "scored_intent_classes": 59,
+    "accuracy": 0.828016134946828,
+    "macro_f1": 0.7798825112466464,
+    "per_intent": {
+      "alarm_query": {
+        "support": 31,
+        "precision": 0.9655172413793104,
+        "recall": 0.9032258064516129,
+        "f1": 0.9333333333333333
+      },
+      "alarm_remove": {
+        "support": 18,
+        "precision": 0.7894736842105263,
+        "recall": 0.8333333333333334,
+        "f1": 0.8108108108108109
+      },
+      "alarm_set": {
+        "support": 40,
+        "precision": 0.926829268292683,
+        "recall": 0.95,
+        "f1": 0.9382716049382716
+      },
+      "audio_volume_down": {
+        "support": 8,
+        "precision": 1.0,
+        "recall": 0.875,
+        "f1": 0.9333333333333333
+      },
+      "audio_volume_mute": {
+        "support": 23,
+        "precision": 0.7692307692307693,
+        "recall": 0.8695652173913043,
+        "f1": 0.8163265306122449
+      },
+      "audio_volume_other": {
+        "support": 5,
+        "precision": 0.6666666666666666,
+        "recall": 0.4,
+        "f1": 0.5
+      },
+      "audio_volume_up": {
+        "support": 12,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+      },
+      "calendar_query": {
+        "support": 120,
+        "precision": 0.703125,
+        "recall": 0.75,
+        "f1": 0.7258064516129032
+      },
+      "calendar_remove": {
+        "support": 64,
+        "precision": 0.8356164383561644,
+        "recall": 0.953125,
+        "f1": 0.8905109489051095
+      },
+      "calendar_set": {
+        "support": 204,
+        "precision": 0.8544600938967136,
+        "recall": 0.8921568627450981,
+        "f1": 0.8729016786570744
+      },
+      "cooking_recipe": {
+        "support": 70,
+        "precision": 0.9154929577464789,
+        "recall": 0.9285714285714286,
+        "f1": 0.921985815602837
+      },
+      "datetime_convert": {
+        "support": 15,
+        "precision": 0.9090909090909091,
+        "recall": 0.6666666666666666,
+        "f1": 0.7692307692307692
+      },
+      "datetime_query": {
+        "support": 71,
+        "precision": 0.7831325301204819,
+        "recall": 0.9154929577464789,
+        "f1": 0.8441558441558441
+      },
+      "email_addcontact": {
+        "support": 12,
+        "precision": 0.4,
+        "recall": 0.3333333333333333,
+        "f1": 0.3636363636363636
+      },
+      "email_query": {
+        "support": 110,
+        "precision": 0.926605504587156,
+        "recall": 0.9181818181818182,
+        "f1": 0.9223744292237444
+      },
+      "email_querycontact": {
+        "support": 26,
+        "precision": 0.6774193548387096,
+        "recall": 0.8076923076923077,
+        "f1": 0.7368421052631579
+      },
+      "email_sendemail": {
+        "support": 107,
+        "precision": 0.9134615384615384,
+        "recall": 0.8878504672897196,
+        "f1": 0.9004739336492891
+      },
+      "general_greet": {
+        "support": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "general_joke": {
+        "support": 17,
+        "precision": 1.0,
+        "recall": 0.9411764705882353,
+        "f1": 0.9696969696969697
+      },
+      "general_quirky": {
+        "support": 164,
+        "precision": 0.6518518518518519,
+        "recall": 0.5365853658536586,
+        "f1": 0.588628762541806
+      },
+      "iot_cleaning": {
+        "support": 11,
+        "precision": 0.8181818181818182,
+        "recall": 0.8181818181818182,
+        "f1": 0.8181818181818182
+      },
+      "iot_coffee": {
+        "support": 31,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "iot_hue_lightchange": {
+        "support": 34,
+        "precision": 0.9032258064516129,
+        "recall": 0.8235294117647058,
+        "f1": 0.8615384615384616
+      },
+      "iot_hue_lightdim": {
+        "support": 14,
+        "precision": 0.8,
+        "recall": 0.8571428571428571,
+        "f1": 0.8275862068965518
+      },
+      "iot_hue_lightoff": {
+        "support": 29,
+        "precision": 0.9310344827586207,
+        "recall": 0.9310344827586207,
+        "f1": 0.9310344827586207
+      },
+      "iot_hue_lighton": {
+        "support": 3,
+        "precision": 0.2,
+        "recall": 0.3333333333333333,
+        "f1": 0.25
+      },
+      "iot_hue_lightup": {
+        "support": 22,
+        "precision": 0.7916666666666666,
+        "recall": 0.8636363636363636,
+        "f1": 0.8260869565217391
+      },
+      "iot_wemo_off": {
+        "support": 9,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8
+      },
+      "iot_wemo_on": {
+        "support": 8,
+        "precision": 1.0,
+        "recall": 0.625,
+        "f1": 0.7692307692307693
+      },
+      "lists_createoradd": {
+        "support": 34,
+        "precision": 0.896551724137931,
+        "recall": 0.7647058823529411,
+        "f1": 0.8253968253968255
+      },
+      "lists_query": {
+        "support": 47,
+        "precision": 0.7647058823529411,
+        "recall": 0.8297872340425532,
+        "f1": 0.7959183673469387
+      },
+      "lists_remove": {
+        "support": 44,
+        "precision": 1.0,
+        "recall": 0.6136363636363636,
+        "f1": 0.7605633802816901
+      },
+      "music_dislikeness": {
+        "support": 4,
+        "precision": 0.5,
+        "recall": 0.25,
+        "f1": 0.3333333333333333
+      },
+      "music_likeness": {
+        "support": 31,
+        "precision": 0.75,
+        "recall": 0.6774193548387096,
+        "f1": 0.7118644067796611
+      },
+      "music_query": {
+        "support": 35,
+        "precision": 0.9310344827586207,
+        "recall": 0.7714285714285715,
+        "f1": 0.8437500000000001
+      },
+      "music_settings": {
+        "support": 6,
+        "precision": 0.25,
+        "recall": 0.16666666666666666,
+        "f1": 0.2
+      },
+      "news_query": {
+        "support": 115,
+        "precision": 0.7368421052631579,
+        "recall": 0.8521739130434782,
+        "f1": 0.7903225806451611
+      },
+      "play_audiobook": {
+        "support": 38,
+        "precision": 0.8918918918918919,
+        "recall": 0.868421052631579,
+        "f1": 0.88
+      },
+      "play_game": {
+        "support": 29,
+        "precision": 0.896551724137931,
+        "recall": 0.896551724137931,
+        "f1": 0.896551724137931
+      },
+      "play_music": {
+        "support": 164,
+        "precision": 0.806282722513089,
+        "recall": 0.9390243902439024,
+        "f1": 0.8676056338028169
+      },
+      "play_podcasts": {
+        "support": 58,
+        "precision": 0.9814814814814815,
+        "recall": 0.9137931034482759,
+        "f1": 0.9464285714285714
+      },
+      "play_radio": {
+        "support": 66,
+        "precision": 0.847457627118644,
+        "recall": 0.7575757575757576,
+        "f1": 0.7999999999999999
+      },
+      "qa_currency": {
+        "support": 35,
+        "precision": 0.9722222222222222,
+        "recall": 1.0,
+        "f1": 0.9859154929577464
+      },
+      "qa_definition": {
+        "support": 57,
+        "precision": 0.8421052631578947,
+        "recall": 0.8421052631578947,
+        "f1": 0.8421052631578947
+      },
+      "qa_factoid": {
+        "support": 139,
+        "precision": 0.71875,
+        "recall": 0.8273381294964028,
+        "f1": 0.7692307692307693
+      },
+      "qa_maths": {
+        "support": 22,
+        "precision": 0.95,
+        "recall": 0.8636363636363636,
+        "f1": 0.9047619047619048
+      },
+      "qa_stock": {
+        "support": 25,
+        "precision": 0.7931034482758621,
+        "recall": 0.92,
+        "f1": 0.851851851851852
+      },
+      "recommendation_events": {
+        "support": 43,
+        "precision": 0.7777777777777778,
+        "recall": 0.6511627906976745,
+        "f1": 0.7088607594936709
+      },
+      "recommendation_locations": {
+        "support": 31,
+        "precision": 0.7647058823529411,
+        "recall": 0.8387096774193549,
+        "f1": 0.7999999999999999
+      },
+      "recommendation_movies": {
+        "support": 20,
+        "precision": 0.7368421052631579,
+        "recall": 0.7,
+        "f1": 0.717948717948718
+      },
+      "social_post": {
+        "support": 78,
+        "precision": 0.9428571428571428,
+        "recall": 0.8461538461538461,
+        "f1": 0.8918918918918919
+      },
+      "social_query": {
+        "support": 23,
+        "precision": 0.9,
+        "recall": 0.782608695652174,
+        "f1": 0.8372093023255814
+      },
+      "takeaway_order": {
+        "support": 21,
+        "precision": 0.72,
+        "recall": 0.8571428571428571,
+        "f1": 0.782608695652174
+      },
+      "takeaway_query": {
+        "support": 31,
+        "precision": 0.9523809523809523,
+        "recall": 0.6451612903225806,
+        "f1": 0.7692307692307692
+      },
+      "transport_query": {
+        "support": 50,
+        "precision": 0.75,
+        "recall": 0.72,
+        "f1": 0.7346938775510204
+      },
+      "transport_taxi": {
+        "support": 21,
+        "precision": 1.0,
+        "recall": 0.9047619047619048,
+        "f1": 0.9500000000000001
+      },
+      "transport_ticket": {
+        "support": 33,
+        "precision": 0.9310344827586207,
+        "recall": 0.8181818181818182,
+        "f1": 0.8709677419354839
+      },
+      "transport_traffic": {
+        "support": 13,
+        "precision": 0.7333333333333333,
+        "recall": 0.8461538461538461,
+        "f1": 0.7857142857142856
+      },
+      "weather_query": {
+        "support": 135,
+        "precision": 0.8928571428571429,
+        "recall": 0.9259259259259259,
+        "f1": 0.9090909090909091
+      }
+    },
+    "per_scenario": {
+      "alarm": {
+        "examples": 89,
+        "accuracy": 0.9101123595505618
+      },
+      "audio": {
+        "examples": 48,
+        "accuracy": 0.7708333333333334
+      },
+      "calendar": {
+        "examples": 388,
+        "accuracy": 0.8582474226804123
+      },
+      "cooking": {
+        "examples": 70,
+        "accuracy": 0.9285714285714286
+      },
+      "datetime": {
+        "examples": 86,
+        "accuracy": 0.872093023255814
+      },
+      "email": {
+        "examples": 255,
+        "accuracy": 0.8666666666666667
+      },
+      "general": {
+        "examples": 182,
+        "accuracy": 0.5714285714285714
+      },
+      "iot": {
+        "examples": 161,
+        "accuracy": 0.8571428571428571
+      },
+      "lists": {
+        "examples": 125,
+        "accuracy": 0.736
+      },
+      "music": {
+        "examples": 76,
+        "accuracy": 0.6578947368421053
+      },
+      "news": {
+        "examples": 115,
+        "accuracy": 0.8521739130434782
+      },
+      "play": {
+        "examples": 355,
+        "accuracy": 0.8901408450704226
+      },
+      "qa": {
+        "examples": 278,
+        "accuracy": 0.8633093525179856
+      },
+      "recommendation": {
+        "examples": 94,
+        "accuracy": 0.723404255319149
+      },
+      "social": {
+        "examples": 101,
+        "accuracy": 0.8316831683168316
+      },
+      "takeaway": {
+        "examples": 52,
+        "accuracy": 0.7307692307692307
+      },
+      "transport": {
+        "examples": 117,
+        "accuracy": 0.7948717948717948
+      },
+      "weather": {
+        "examples": 135,
+        "accuracy": 0.9259259259259259
+      }
+    }
+  },
+  "timing_seconds": {
+    "model_load": 0.1295,
+    "vectorize_and_predict_2974_rows": 0.1099,
+    "total_including_archive_read_and_scoring": 3.4111
+  },
+  "predictions_file": "reports\\massive-linear-test.jsonl"
+}
