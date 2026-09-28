@@ -8,4 +8,5 @@
 !scripts/evaluate_massive_linear.py
 !scripts/massive_linear_text.py
 !scripts/massive_metrics.py
+!scripts/massive_task.py
 !scripts/serve_massive.py

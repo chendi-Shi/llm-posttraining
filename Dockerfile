@@ -25,7 +25,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY scripts/evaluate_massive_linear.py scripts/massive_linear_text.py scripts/massive_metrics.py /app/scripts/
+COPY scripts/evaluate_massive_linear.py scripts/massive_linear_text.py scripts/massive_metrics.py scripts/massive_task.py /app/scripts/
 
 RUN mkdir -p data/raw outputs reports attribution \
     && curl --fail --location --show-error --silent --retry 3 --retry-delay 2 \

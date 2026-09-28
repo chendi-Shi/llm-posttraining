@@ -10,7 +10,7 @@ MASSIVE 数据采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)�
 
 ## 从干净检出审计构建
 
-需要 Linux 主机、Docker Engine、Docker Compose v2，以及构建时可访问官方数据下载地址和 Python 包源。本项目应是独立检出目录，且本地 Docker 构建上下文已由 `.dockerignore` 限定为四个脚本、Dockerfile 和线性后端固定依赖。
+需要 Linux 主机、Docker Engine、Docker Compose v2，以及构建时可访问官方数据下载地址和 Python 包源。本项目应是独立检出目录，且本地 Docker 构建上下文已由 `.dockerignore` 限定为五个脚本、Dockerfile 和线性后端固定依赖。
 
 先构建**仅用于审计、不可作为服务镜像发布**的 `trained` 阶段：
 
