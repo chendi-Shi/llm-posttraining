@@ -75,6 +75,10 @@ def main() -> None:
     tokenizer = load_tokenizer(args.model)
     base_model = load_quantized_base(args.model)
     model = PeftModel.from_pretrained(base_model, str(adapter_dir), is_trainable=True)
+    # TRL uses the named "ref" adapter when computing reference log probabilities.
+    # Keep the starting SFT weights frozen there instead of comparing to the bare base.
+    model.load_adapter(str(adapter_dir), adapter_name="ref", is_trainable=False)
+    model.set_adapter("default")
     dataset = load_dataset(
         "json",
         data_files=str(train_file),
@@ -118,6 +122,7 @@ def main() -> None:
         "train_file_sha256": train_sha256,
         "source_adapter": str(adapter_dir),
         "source_adapter_sha256": source_adapter_sha256,
+        "reference_adapter_sha256": source_adapter_sha256,
         "model": args.model,
         "model_asset_sha256": model_asset_sha256,
         "max_steps": args.max_steps,

@@ -16,7 +16,7 @@ v2 第 160 步 SFT 在自然频率开发集上严格实体 F1 为 42.17%，无�
 
 ## 训练和门槛
 
-从 v2 第 160 步 adapter 出发，其 `adapter_model.safetensors` SHA-256 固定为 `206bc1eee5115e20844e22fa146893c9f651058709c6aff5f15e77ec63f61ce6`；Qwen2.5-0.5B-Instruct 基座及 tokenizer SHA-256 分别为 `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe`、`c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539`。在 CPU 上运行 4-bit QLoRA DPO：`beta=0.1`、学习率 `1e-5`、单设备 batch 1、梯度累计 4、最大序列 256 token、种子 `20260930`、**64 optimizer steps**；第 32 步仅供诊断，最终只评估第 64 步。训练前须对全部 256 对执行真实 tokenizer 长度和结构检查；若任一超限，停止并在改计划后重新公开说明，不能悄悄截断。
+从 v2 第 160 步 adapter 出发，其 `adapter_model.safetensors` SHA-256 固定为 `206bc1eee5115e20844e22fa146893c9f651058709c6aff5f15e77ec63f61ce6`；DPO 的冻结 reference adapter 使用同一份起始 SFT 权重，而非裸基座。Qwen2.5-0.5B-Instruct 基座及 tokenizer SHA-256 分别为 `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe`、`c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539`。在 CPU 上运行 4-bit QLoRA DPO：`beta=0.1`、学习率 `1e-5`、单设备 batch 1、梯度累计 4、最大序列 256 token、种子 `20260930`、**64 optimizer steps**；第 32 步仅供诊断，最终只评估第 64 步。训练前须对全部 256 对执行真实 tokenizer 长度和结构检查；若任一超限，停止并在改计划后重新公开说明，不能悄悄截断。
 
 开发集仍为 v2 的 250 条，固定自由贪心生成设置和严格实体计分。第 64 步必须同时满足：JSON／结构／原文复制合法率各 **≥95%**，无目标失败率 **≤30%**，总体严格实体 F1 **≥55%**，阳性子集 F1 **≥60%**；并且相对冻结 v2 第 160 步的配对组 bootstrap 95% 区间中，实体 F1 差值和无目标失败率下降的下界均 **>0**。任一不满足则停止，不生成新选择锁、不打开确认集。这些是本轮训练结果的门槛，不追溯改变 v2 失败结论。
 
