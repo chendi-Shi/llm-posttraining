@@ -19,3 +19,5 @@ v3 DPO 相对 v2 SFT 将无槽失败从 126/167 降至 28/167，但阳性子集 
 首次完整训练从固定起点启动，原定第 32 步保存检查点；进度日志最后显示第 **31/64** 步，随后进程消失，没有 Python traceback，也没有生成第 32 步检查点或最终 adapter。原因未确认，不能把其输出当作完成的模型。该次 stdout/stderr 本地日志 SHA-256 分别为 `e7ea130a129d382f558e4802b903e7b567a09faa37d94a6cb31bbfe01554b2bd` 和 `bc9cfc5c926db519a4b1a48dece3d6e909a814740bd4fc3ce892ce42caf47bde`。没有对该次模型进行开发集推理。
 
 重跑从**相同的冻结 v2 起始 adapter**和相同 256 条训练数据重新开始，保持 `seed=20260930`、batch 1、梯度累计 4、最大长度 256、学习率 `1e-5`、最终 **64 optimizer steps** 不变；只把 `save_steps` 从 32 改为 **8**，以便再次中断时从完整优化器、scheduler 和 RNG 状态恢复。重跑输出目录为 `outputs/massive-slots-v3-matched-sft-64-restart1`，首次空输出目录和日志保留本地。最终仍只评价第 64 步，所有中途检查点不用于模型选择。
+
+重跑已从头完成 **64/64 步**，没有再次恢复；优化阶段耗时 3617.73 秒。最终运行清单 SHA-256 为 `82e209eeb4e92efb5b151bef5e6b3eb0596062189357bbf066a88db5ed3c7480`，最终 adapter SHA-256 为 **`97aa3eaf5ea19442f0c50bdd9048807b9de9a931fe86f17a11eb578e1e3343fc`**，全部 adapter tensor 保存为 **`torch.bfloat16`**；起始 v2 adapter 为 `torch.float32`。此处在对照模型的开发集推理前记录，保存精度差异仍限制与起始模型的单因素解释。
