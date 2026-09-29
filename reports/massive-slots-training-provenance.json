@@ -1,0 +1,48 @@
+{
+  "study": "MASSIVE 1.0 zh-CN four-slot JSON SFT",
+  "purpose": "Public, aggregate-only provenance for the local 96-step training run",
+  "source_run_manifest": "outputs/massive-slots-sft-lr3e4-96/run_manifest.json (local, Git ignored)",
+  "source_archive_sha256": "7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8",
+  "old_intent_sft_train_sha256": "2975de570be7213d47a5dff753b86f595a60d5edc1d5e38051fb177ca8cf1482",
+  "slot_train_sha256": "e15ded91d18b41882088df8db46bcc70e52df1a8218f579240ff8a2c8ed761de",
+  "slot_dev_sha256": "87e97dd67f41173088142185d05bd993b2df12394e99bcf495c3db60039a9985",
+  "slot_confirmation_sha256": "ea02dd76ec0ac0ec9601dd11c8dee06a4be4855963e9232ced4f5865be532304",
+  "slot_manifest_sha256": "d6736c2779f00e898dd623911bed08f7c93ab053c287b5ffaaf211a6eee36e32",
+  "base_model_file_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "base_tokenizer_file_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "selected_adapter_file_sha256": "d5a5dd27dbe4e05bfa171e709378a9432e0b3cad2faba44bc2e8970016879c48",
+  "documented_python": "3.10",
+  "package_versions_recorded_by_training_run": {
+    "torch": "2.14.0+cpu",
+    "transformers": "5.17.0",
+    "trl": "1.13.0",
+    "peft": "0.21.0",
+    "bitsandbytes": "0.50.2"
+  },
+  "training": {
+    "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "quantization": "4-bit",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "lora_target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+    "train_examples": 384,
+    "max_steps": 96,
+    "max_length": 160,
+    "learning_rate": 0.0003,
+    "seed": 20260928,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "save_steps": 48,
+    "resume_from_checkpoint": null,
+    "global_step": 96,
+    "training_seconds": 6071.46
+  },
+  "evaluation_generation": {
+    "decoding": "greedy_unconstrained",
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64
+  },
+  "publication_boundary": "No source utterances, per-row predictions, model weights, or local absolute paths"
+}

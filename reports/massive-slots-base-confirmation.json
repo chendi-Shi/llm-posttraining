@@ -1,0 +1,108 @@
+{
+  "examples": 200,
+  "metric_definition": {
+    "entity_match": "multiset of (type, literal value) per utterance",
+    "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+    "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+    "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+  },
+  "gold_slot_count": 228,
+  "predicted_slot_count": 7,
+  "micro": {
+    "tp": 3,
+    "fp": 4,
+    "fn": 225,
+    "precision": 0.42857142857142855,
+    "recall": 0.013157894736842105,
+    "f1": 0.02553191489361702
+  },
+  "micro_f1": 0.02553191489361702,
+  "per_type": {
+    "date": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 69,
+      "precision": 0.3333333333333333,
+      "recall": 0.014285714285714285,
+      "f1": 0.0273972602739726
+    },
+    "time": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 60,
+      "precision": 0.5,
+      "recall": 0.01639344262295082,
+      "f1": 0.031746031746031744
+    },
+    "place_name": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 49,
+      "precision": 0.5,
+      "recall": 0.02,
+      "f1": 0.038461538461538464
+    },
+    "person": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 47,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "macro_f1": 0.024401207620385702,
+  "sentence_exact_accuracy": 0.0,
+  "sentence_exact_count": 0,
+  "json_valid_rate": 0.48,
+  "schema_valid_rate": 0.11,
+  "copy_valid_rate": 0.015,
+  "invalid_output_count": 197,
+  "error_counts": {
+    "invalid_json": 104,
+    "invalid_slot_schema": 60,
+    "invalid_slot_type_or_value": 14,
+    "value_not_copied_from_utterance": 19
+  },
+  "no_slot_examples": 40,
+  "no_slot_false_positive_count": 0,
+  "no_slot_false_positive_rate": 0.0,
+  "no_slot_invalid_output_count": 40,
+  "no_slot_failure_rate": 1.0,
+  "bootstrap": {
+    "unit": "normalized_utterance_group",
+    "clusters": 200,
+    "samples": 1000,
+    "seed": 20260928,
+    "confidence": 0.95,
+    "micro_f1_ci95": [
+      0.0,
+      0.06558051676448762
+    ],
+    "sentence_exact_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "confirmation",
+  "source_partition": "train",
+  "eval_file": "data\\massive-zh\\slots\\confirmation.jsonl",
+  "eval_file_sha256": "ea02dd76ec0ac0ec9601dd11c8dee06a4be4855963e9232ced4f5865be532304",
+  "study_manifest_sha256": "d6736c2779f00e898dd623911bed08f7c93ab053c287b5ffaaf211a6eee36e32",
+  "model": "models/Qwen2.5-0.5B-Instruct",
+  "adapter": null,
+  "frozen_model_files_sha256": {
+    "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+  },
+  "elapsed_seconds": 49528.32,
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "do_sample": false,
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 110
+  }
+}

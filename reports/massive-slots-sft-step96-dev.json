@@ -1,0 +1,103 @@
+{
+  "examples": 100,
+  "metric_definition": {
+    "entity_match": "multiset of (type, literal value) per utterance",
+    "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+    "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+    "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+  },
+  "gold_slot_count": 110,
+  "predicted_slot_count": 117,
+  "micro": {
+    "tp": 66,
+    "fp": 51,
+    "fn": 44,
+    "precision": 0.5641025641025641,
+    "recall": 0.6,
+    "f1": 0.5814977973568282
+  },
+  "micro_f1": 0.5814977973568282,
+  "per_type": {
+    "date": {
+      "tp": 25,
+      "fp": 28,
+      "fn": 6,
+      "precision": 0.4716981132075472,
+      "recall": 0.8064516129032258,
+      "f1": 0.5952380952380952
+    },
+    "time": {
+      "tp": 6,
+      "fp": 7,
+      "fn": 21,
+      "precision": 0.46153846153846156,
+      "recall": 0.2222222222222222,
+      "f1": 0.3
+    },
+    "place_name": {
+      "tp": 17,
+      "fp": 6,
+      "fn": 12,
+      "precision": 0.7391304347826086,
+      "recall": 0.5862068965517241,
+      "f1": 0.6538461538461539
+    },
+    "person": {
+      "tp": 18,
+      "fp": 10,
+      "fn": 5,
+      "precision": 0.6428571428571429,
+      "recall": 0.782608695652174,
+      "f1": 0.7058823529411765
+    }
+  },
+  "macro_f1": 0.5637416505063564,
+  "sentence_exact_accuracy": 0.39,
+  "sentence_exact_count": 39,
+  "json_valid_rate": 1.0,
+  "schema_valid_rate": 0.99,
+  "copy_valid_rate": 0.92,
+  "invalid_output_count": 8,
+  "error_counts": {
+    "invalid_slot_type_or_value": 1,
+    "value_not_copied_from_utterance": 7
+  },
+  "no_slot_examples": 20,
+  "no_slot_false_positive_count": 15,
+  "no_slot_false_positive_rate": 0.75,
+  "no_slot_invalid_output_count": 5,
+  "no_slot_failure_rate": 1.0,
+  "bootstrap": {
+    "unit": "normalized_utterance_group",
+    "clusters": 100,
+    "samples": 1000,
+    "seed": 20260928,
+    "confidence": 0.95,
+    "micro_f1_ci95": [
+      0.4999472573839662,
+      0.6635133177425029
+    ],
+    "sentence_exact_ci95": [
+      0.3,
+      0.49
+    ]
+  },
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "dev",
+  "source_partition": "train",
+  "eval_file": "data\\massive-zh\\slots\\dev.jsonl",
+  "eval_file_sha256": "87e97dd67f41173088142185d05bd993b2df12394e99bcf495c3db60039a9985",
+  "study_manifest_sha256": "d6736c2779f00e898dd623911bed08f7c93ab053c287b5ffaaf211a6eee36e32",
+  "model": "models/Qwen2.5-0.5B-Instruct",
+  "adapter": "outputs/massive-slots-sft-lr3e4-96",
+  "frozen_model_files_sha256": null,
+  "elapsed_seconds": 477.19,
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "do_sample": false,
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 104
+  }
+}

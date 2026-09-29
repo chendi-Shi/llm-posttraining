@@ -1,0 +1,103 @@
+{
+  "examples": 100,
+  "metric_definition": {
+    "entity_match": "multiset of (type, literal value) per utterance",
+    "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+    "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+    "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+  },
+  "gold_slot_count": 110,
+  "predicted_slot_count": 3,
+  "micro": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 110,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "micro_f1": 0.0,
+  "per_type": {
+    "date": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 31,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "time": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 27,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "place_name": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 29,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "person": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 23,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "macro_f1": 0.0,
+  "sentence_exact_accuracy": 0.0,
+  "sentence_exact_count": 0,
+  "json_valid_rate": 0.46,
+  "schema_valid_rate": 0.09,
+  "copy_valid_rate": 0.01,
+  "invalid_output_count": 99,
+  "error_counts": {
+    "invalid_json": 54,
+    "invalid_slot_schema": 30,
+    "invalid_slot_type_or_value": 7,
+    "value_not_copied_from_utterance": 8
+  },
+  "no_slot_examples": 20,
+  "no_slot_false_positive_count": 1,
+  "no_slot_false_positive_rate": 0.05,
+  "no_slot_invalid_output_count": 19,
+  "no_slot_failure_rate": 1.0,
+  "bootstrap": {
+    "unit": "normalized_utterance_group",
+    "clusters": 100,
+    "samples": 1000,
+    "seed": 20260928,
+    "confidence": 0.95,
+    "micro_f1_ci95": [
+      0.0,
+      0.0
+    ],
+    "sentence_exact_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "dev",
+  "source_partition": "train",
+  "eval_file": "data\\massive-zh\\slots\\dev.jsonl",
+  "eval_file_sha256": "87e97dd67f41173088142185d05bd993b2df12394e99bcf495c3db60039a9985",
+  "model": "models/Qwen2.5-0.5B-Instruct",
+  "adapter": null,
+  "elapsed_seconds": 1710.72,
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "do_sample": false,
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 104
+  }
+}

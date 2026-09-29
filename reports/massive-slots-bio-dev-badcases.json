@@ -1,0 +1,101 @@
+{
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "dev",
+  "source_partition": "train",
+  "eval_file_sha256": "87e97dd67f41173088142185d05bd993b2df12394e99bcf495c3db60039a9985",
+  "examples": 100,
+  "row_level_data_in_report": false,
+  "systems": {
+    "bio": {
+      "prediction_file_sha256": "5feb71b6b549c8c8c99264dfa2c0c2290af9aecdaee06da10466c2b08d457ae0",
+      "analysis": {
+        "examples": 100,
+        "denominators": {
+          "all_rows": 100,
+          "gold_nonempty_rows": 80,
+          "gold_empty_rows": 20,
+          "valid_output_rows": 100
+        },
+        "categories_overlap": true,
+        "counts_are_row_level": true,
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "categories": {
+          "invalid_json": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "JSON parsing failed."
+          },
+          "invalid_schema": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "JSON parsed but did not meet the strict slot schema, including duplicate object keys."
+          },
+          "invalid_copy": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "Schema passed but at least one value was not a literal source substring."
+          },
+          "missed_all_gold_slots": {
+            "examples": 29,
+            "rate_all_rows": 0.29,
+            "definition": "Gold has slots and zero exact (type, value) multiset matches; includes invalid outputs.",
+            "rate_gold_nonempty_rows": 0.3625
+          },
+          "missed_all_gold_slots_valid_output": {
+            "examples": 29,
+            "rate_all_rows": 0.29,
+            "definition": "Same as missed_all_gold_slots, restricted to valid outputs.",
+            "rate_gold_nonempty_rows": 0.3625
+          },
+          "extra_slots_on_gold_empty": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "Valid output contains slots when gold contains none.",
+            "rate_gold_empty_rows": 0.0
+          },
+          "type_confusion_same_value": {
+            "examples": 2,
+            "rate_all_rows": 0.02,
+            "definition": "After exact matching, the same literal value appears under different gold and predicted types."
+          },
+          "same_type_different_value": {
+            "examples": 21,
+            "rate_all_rows": 0.21,
+            "definition": "After exact matching, an unmatched gold and predicted slot share a type but have different literal values; this is a possible value mismatch, not a proven entity alignment."
+          },
+          "possible_span_boundary_mismatch": {
+            "examples": 20,
+            "rate_all_rows": 0.2,
+            "definition": "A subset of same_type_different_value where one literal value contains the other; source occurrence offsets are not aligned."
+          },
+          "partial_correct": {
+            "examples": 19,
+            "rate_all_rows": 0.19,
+            "definition": "A valid output matches at least one gold slot exactly and still has false positives or false negatives."
+          },
+          "duplicate_slot_output": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "A valid output repeats a (type, value) pair; this can be correct when gold repeats it too."
+          },
+          "excess_duplicate_slot": {
+            "examples": 0,
+            "rate_all_rows": 0.0,
+            "definition": "A valid output repeats a (type, value) pair more times than gold, with at least two copies."
+          },
+          "fully_correct": {
+            "examples": 52,
+            "rate_all_rows": 0.52,
+            "definition": "A valid output exactly equals the gold slot multiset."
+          },
+          "incorrect": {
+            "examples": 48,
+            "rate_all_rows": 0.48,
+            "definition": "Not fully correct; includes invalid outputs."
+          }
+        },
+        "validity_error_counts": {}
+      }
+    }
+  }
+}

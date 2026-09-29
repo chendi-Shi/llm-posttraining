@@ -1,0 +1,352 @@
+{
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "confirmation",
+  "locked_manifest_sha256": "d6736c2779f00e898dd623911bed08f7c93ab053c287b5ffaaf211a6eee36e32",
+  "source_partition": "train",
+  "eval_file": "data\\massive-zh\\slots\\confirmation.jsonl",
+  "eval_file_sha256": "ea02dd76ec0ac0ec9601dd11c8dee06a4be4855963e9232ced4f5865be532304",
+  "eval_ids_sha256": "f41f91a11fb619369fa90845e351a9aba67d7cab0f10247e98ed8629c86b1eb0",
+  "examples": 200,
+  "systems": {
+    "base": {
+      "prediction_file": "_tmp\\massive-slots-base-confirmation-predictions.jsonl",
+      "prediction_file_sha256": "7ccd115d2f755b178a89e5d00187e28f0ec92601fe68a7455dbb7fd96653a8b7",
+      "metrics": {
+        "examples": 200,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 228,
+        "predicted_slot_count": 7,
+        "micro": {
+          "tp": 3,
+          "fp": 4,
+          "fn": 225,
+          "precision": 0.42857142857142855,
+          "recall": 0.013157894736842105,
+          "f1": 0.02553191489361702
+        },
+        "micro_f1": 0.02553191489361702,
+        "per_type": {
+          "date": {
+            "tp": 1,
+            "fp": 2,
+            "fn": 69,
+            "precision": 0.3333333333333333,
+            "recall": 0.014285714285714285,
+            "f1": 0.0273972602739726
+          },
+          "time": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 60,
+            "precision": 0.5,
+            "recall": 0.01639344262295082,
+            "f1": 0.031746031746031744
+          },
+          "place_name": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 49,
+            "precision": 0.5,
+            "recall": 0.02,
+            "f1": 0.038461538461538464
+          },
+          "person": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 47,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        },
+        "macro_f1": 0.024401207620385702,
+        "sentence_exact_accuracy": 0.0,
+        "sentence_exact_count": 0,
+        "json_valid_rate": 0.48,
+        "schema_valid_rate": 0.11,
+        "copy_valid_rate": 0.015,
+        "invalid_output_count": 197,
+        "error_counts": {
+          "invalid_json": 104,
+          "invalid_slot_schema": 60,
+          "invalid_slot_type_or_value": 14,
+          "value_not_copied_from_utterance": 19
+        },
+        "no_slot_examples": 40,
+        "no_slot_false_positive_count": 0,
+        "no_slot_false_positive_rate": 0.0,
+        "no_slot_invalid_output_count": 40,
+        "no_slot_failure_rate": 1.0,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 200,
+          "samples": 1000,
+          "seed": 20260928,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.0,
+            0.06558051676448762
+          ],
+          "sentence_exact_ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "sft96": {
+      "prediction_file": "_tmp\\massive-slots-sft-confirmation-predictions.jsonl",
+      "prediction_file_sha256": "587d86792fa6cbc90c1c927c647e66125cdf6b63441b37b6daf42028a194ab10",
+      "metrics": {
+        "examples": 200,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 228,
+        "predicted_slot_count": 232,
+        "micro": {
+          "tp": 139,
+          "fp": 93,
+          "fn": 89,
+          "precision": 0.5991379310344828,
+          "recall": 0.6096491228070176,
+          "f1": 0.6043478260869565
+        },
+        "micro_f1": 0.6043478260869565,
+        "per_type": {
+          "date": {
+            "tp": 50,
+            "fp": 48,
+            "fn": 20,
+            "precision": 0.5102040816326531,
+            "recall": 0.7142857142857143,
+            "f1": 0.5952380952380952
+          },
+          "time": {
+            "tp": 28,
+            "fp": 6,
+            "fn": 33,
+            "precision": 0.8235294117647058,
+            "recall": 0.45901639344262296,
+            "f1": 0.5894736842105263
+          },
+          "place_name": {
+            "tp": 28,
+            "fp": 23,
+            "fn": 22,
+            "precision": 0.5490196078431373,
+            "recall": 0.56,
+            "f1": 0.5544554455445545
+          },
+          "person": {
+            "tp": 33,
+            "fp": 16,
+            "fn": 14,
+            "precision": 0.673469387755102,
+            "recall": 0.7021276595744681,
+            "f1": 0.6875
+          }
+        },
+        "macro_f1": 0.606666806248294,
+        "sentence_exact_accuracy": 0.4,
+        "sentence_exact_count": 80,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 0.97,
+        "copy_valid_rate": 0.925,
+        "invalid_output_count": 15,
+        "error_counts": {
+          "invalid_slot_type_or_value": 6,
+          "value_not_copied_from_utterance": 9
+        },
+        "no_slot_examples": 40,
+        "no_slot_false_positive_count": 34,
+        "no_slot_false_positive_rate": 0.85,
+        "no_slot_invalid_output_count": 6,
+        "no_slot_failure_rate": 1.0,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 200,
+          "samples": 1000,
+          "seed": 20260928,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.5394677274171344,
+            0.6609893561109426
+          ],
+          "sentence_exact_ci95": [
+            0.335,
+            0.465
+          ]
+        }
+      }
+    },
+    "bio": {
+      "prediction_file": "_tmp\\massive-slots-bio-confirmation-predictions.jsonl",
+      "prediction_file_sha256": "b1434cce7c7405fd60617c9d1309bddd477da98b5825c8e99b93a6d0a7d4832b",
+      "metrics": {
+        "examples": 200,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 228,
+        "predicted_slot_count": 207,
+        "micro": {
+          "tp": 148,
+          "fp": 59,
+          "fn": 80,
+          "precision": 0.714975845410628,
+          "recall": 0.6491228070175439,
+          "f1": 0.6804597701149425
+        },
+        "micro_f1": 0.6804597701149425,
+        "per_type": {
+          "date": {
+            "tp": 60,
+            "fp": 20,
+            "fn": 10,
+            "precision": 0.75,
+            "recall": 0.8571428571428571,
+            "f1": 0.8
+          },
+          "time": {
+            "tp": 41,
+            "fp": 20,
+            "fn": 20,
+            "precision": 0.6721311475409836,
+            "recall": 0.6721311475409836,
+            "f1": 0.6721311475409836
+          },
+          "place_name": {
+            "tp": 20,
+            "fp": 10,
+            "fn": 30,
+            "precision": 0.6666666666666666,
+            "recall": 0.4,
+            "f1": 0.5
+          },
+          "person": {
+            "tp": 27,
+            "fp": 9,
+            "fn": 20,
+            "precision": 0.75,
+            "recall": 0.574468085106383,
+            "f1": 0.6506024096385542
+          }
+        },
+        "macro_f1": 0.6556833892948845,
+        "sentence_exact_accuracy": 0.575,
+        "sentence_exact_count": 115,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 1.0,
+        "invalid_output_count": 0,
+        "error_counts": {},
+        "no_slot_examples": 40,
+        "no_slot_false_positive_count": 7,
+        "no_slot_false_positive_rate": 0.175,
+        "no_slot_invalid_output_count": 0,
+        "no_slot_failure_rate": 0.175,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 200,
+          "samples": 1000,
+          "seed": 20260928,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.6167723089235694,
+            0.7426447792938123
+          ],
+          "sentence_exact_ci95": [
+            0.51,
+            0.645
+          ]
+        }
+      }
+    }
+  },
+  "paired_comparisons": {
+    "sft96_minus_base": {
+      "reference": "base",
+      "candidate": "sft96",
+      "unit": "normalized_utterance_group",
+      "clusters": 200,
+      "samples": 1000,
+      "seed": 20260928,
+      "baseline_micro_f1": 0.02553191489361702,
+      "candidate_micro_f1": 0.6043478260869565,
+      "candidate_minus_baseline": 0.5788159111933394,
+      "delta_ci95": [
+        0.5039319685690653,
+        0.6443700321891602
+      ],
+      "bootstrap_probability_delta_positive": 1.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.0,
+      "candidate_sentence_exact_accuracy": 0.4,
+      "sentence_exact_candidate_minus_baseline": 0.4,
+      "sentence_exact_delta_ci95": [
+        0.335,
+        0.465
+      ]
+    },
+    "bio_minus_base": {
+      "reference": "base",
+      "candidate": "bio",
+      "unit": "normalized_utterance_group",
+      "clusters": 200,
+      "samples": 1000,
+      "seed": 20260928,
+      "baseline_micro_f1": 0.02553191489361702,
+      "candidate_micro_f1": 0.6804597701149425,
+      "candidate_minus_baseline": 0.6549278552213255,
+      "delta_ci95": [
+        0.5866018206999379,
+        0.7273934288591247
+      ],
+      "bootstrap_probability_delta_positive": 1.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.0,
+      "candidate_sentence_exact_accuracy": 0.575,
+      "sentence_exact_candidate_minus_baseline": 0.575,
+      "sentence_exact_delta_ci95": [
+        0.51,
+        0.645
+      ]
+    },
+    "bio_minus_sft96": {
+      "reference": "sft96",
+      "candidate": "bio",
+      "unit": "normalized_utterance_group",
+      "clusters": 200,
+      "samples": 1000,
+      "seed": 20260928,
+      "baseline_micro_f1": 0.6043478260869565,
+      "candidate_micro_f1": 0.6804597701149425,
+      "candidate_minus_baseline": 0.07611194402798604,
+      "delta_ci95": [
+        -0.0006250210830032768,
+        0.15126889070344463
+      ],
+      "bootstrap_probability_delta_positive": 0.973,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.4,
+      "candidate_sentence_exact_accuracy": 0.575,
+      "sentence_exact_candidate_minus_baseline": 0.17499999999999993,
+      "sentence_exact_delta_ci95": [
+        0.09,
+        0.26
+      ]
+    }
+  }
+}

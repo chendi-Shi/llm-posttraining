@@ -1,0 +1,35 @@
+{
+  "study": "MASSIVE 1.0 zh-CN four-slot JSON SFT",
+  "locked_at_utc": "2026-09-28 11:22:38 UTC",
+  "selection_rule": "Highest strict entity micro-F1 on dev among SFT steps 48 and 96; prefer step 48 on a tie",
+  "dev_examples": 100,
+  "dev_file_sha256": "87e97dd67f41173088142185d05bd993b2df12394e99bcf495c3db60039a9985",
+  "dev_micro_f1": {
+    "base": 0.0,
+    "sft_step48": 0.575107296137339,
+    "sft_step96": 0.5814977973568282,
+    "bio": 0.6074766355140186
+  },
+  "selected_sft_checkpoint": "outputs/massive-slots-sft-lr3e4-96",
+  "selected_step": 96,
+  "selected_adapter_sha256": "d5a5dd27dbe4e05bfa171e709378a9432e0b3cad2faba44bc2e8970016879c48",
+  "bio_model_sha256": "12c0767cb3913f0f9965b935f0504fabce31e0efc713d8a17362fe00c25c68e4",
+  "base_model_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "locked_data_manifest_sha256": "d6736c2779f00e898dd623911bed08f7c93ab053c287b5ffaaf211a6eee36e32",
+  "confirmation_file_sha256": "ea02dd76ec0ac0ec9601dd11c8dee06a4be4855963e9232ced4f5865be532304",
+  "confirmation_examples": 200,
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "do_sample": false,
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64
+  },
+  "code_sha256": {
+    "massive_slots_py": "25d1d5db439e003f25f3a784a358b0813fbdef74c862c1631178d175e53d08b5",
+    "evaluate_massive_slots_py": "fb35417cab111ae1ffdbeab64ca90b065b845bb47e7289adc47b1beb6973755f",
+    "compare_massive_slots_py": "0edc306f7617da93c204e4dbf2eecdf75383bde3c270c5422bbe44d02a4fd04b"
+  },
+  "confirmation_policy": "Run base, selected SFT, and frozen BIO exactly once; do not use confirmation to choose a checkpoint or change decoding"
+}
