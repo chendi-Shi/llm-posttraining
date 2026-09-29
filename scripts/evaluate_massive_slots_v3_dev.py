@@ -9,6 +9,8 @@ import json
 import time
 from pathlib import Path
 
+from safetensors import safe_open
+
 from compare_massive_slots import aligned_raw_outputs
 from compare_massive_slots_v2 import paired_no_slot_reduction, positive_only_metrics
 from evaluate_massive_slots import (
@@ -41,6 +43,12 @@ EXPECTED_PREFERENCE_SHA256 = "310c26b37fd7eee7cbfb4876def2d398fcd5f0d188a24da20b
 EXPECTED_SOURCE_ADAPTER_SHA256 = "206bc1eee5115e20844e22fa146893c9f651058709c6aff5f15e77ec63f61ce6"
 EXPECTED_BASE_SHA256 = "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"
 EXPECTED_TOKENIZER_SHA256 = "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+EXPECTED_DPO_ADAPTER_SHA256 = "634c83b63b840708e5d8ad63e710fe3a2f219924b3d4cad00ee6f6eb9d721c8a"
+
+
+def adapter_dtypes(path: Path) -> list[str]:
+    with safe_open(str(path), framework="pt", device="cpu") as archive:
+        return sorted({str(archive.get_tensor(key).dtype) for key in archive.keys()})
 
 
 def check_training_run(run: dict, preference_manifest: dict, hashes: dict[str, str]) -> None:
@@ -64,8 +72,13 @@ def check_training_run(run: dict, preference_manifest: dict, hashes: dict[str, s
         raise ValueError("v3 preference pairs differ from the frozen run")
     if (hashes.get("model.safetensors") != EXPECTED_BASE_SHA256
             or hashes.get("tokenizer.json") != EXPECTED_TOKENIZER_SHA256
-            or not hashes.get("adapter_model.safetensors")):
+            or hashes.get("adapter_model.safetensors") != EXPECTED_DPO_ADAPTER_SHA256):
         raise ValueError("v3 inference assets differ from the frozen plan")
+    if (sha256_file(ADAPTER / "ref" / "adapter_model.safetensors")
+            != EXPECTED_SOURCE_ADAPTER_SHA256):
+        raise ValueError("DPO frozen reference adapter differs from its SFT source")
+    if adapter_dtypes(ADAPTER / "adapter_model.safetensors") != ["torch.bfloat16"]:
+        raise ValueError("Saved DPO adapter precision differs from the recorded run")
     if (run.get("model_asset_sha256", {}).get("model.safetensors") != EXPECTED_BASE_SHA256
             or run.get("model_asset_sha256", {}).get("tokenizer.json") != EXPECTED_TOKENIZER_SHA256):
         raise ValueError("DPO training base or tokenizer differs from evaluation")
@@ -135,6 +148,8 @@ def main() -> None:
         "preference_manifest_sha256": sha256_file(PREFERENCE_MANIFEST),
         "training_run_manifest_sha256": sha256_file(ADAPTER / "run_manifest.json"),
         "inference_files_sha256": hashes,
+        "saved_adapter_dtypes": adapter_dtypes(ADAPTER / "adapter_model.safetensors"),
+        "frozen_reference_adapter_sha256": EXPECTED_SOURCE_ADAPTER_SHA256,
         "prediction_file_sha256": prediction_sha256,
         "baseline_prediction_file_sha256": baseline_report["prediction_file_sha256"],
         "generation": {**GENERATION, **inference},

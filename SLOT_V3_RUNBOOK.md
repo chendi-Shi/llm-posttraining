@@ -26,6 +26,8 @@
 
 TRL 会把起始 SFT adapter 复制为冻结 `ref`，再优化默认 adapter。训练输出记录数据、基座、tokenizer、起始与参考 adapter 的哈希和参数。第 32 步检查点只用于故障诊断；模型选择只依据完成的第 64 步。CPU 训练可能需要较长时间。
 
+本次保存的最终默认 adapter 为 `bfloat16`，起始 SFT 与冻结 `ref` 均为 `float32`。评测前已在 [v3 方案的执行记录](reports/massive-slots-v3-design.md)公开此精度差异；运行清单中的 `training_seconds` 不含参考分数预计算。
+
 ## 3. 固定开发集门槛
 
 完整训练结束后执行一次：
