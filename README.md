@@ -1,6 +1,6 @@
 # 本地大模型后训练：中文结构化抽取与意图分类
 
-本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，构造许可清楚的数据、冻结模型选择、严格评测，并保留负结果。已完成的主研究是 MASSIVE 1.0 中文四槽 JSON 抽取 v1：384 条训练、100 条开发、200 条确认，另有同量数据的字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出实际命令、模型哈希、局限与结果。针对 v1 无槽误报，v2 SFT 与 v3 DPO 都按预先公开的方案在自然频率开发集上做纠错实验。v3 DPO 将无槽失败从 126/167 降至 28/167，但总体严格实体 F1 仅 47.12%，未达到预设门槛；新的 400 条确认集继续封存。[v2 结果](reports/massive-slots-v2-study-summary.md)、[v3 结果](reports/massive-slots-v3-study-summary.md)和[岗位证据](JOB_APPLICATION.md)记录完整边界。仓库不含原始数据、权重或逐题预测。
+本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，构造许可清楚的数据、冻结模型选择、严格评测，并保留负结果。已完成的主研究是 MASSIVE 1.0 中文四槽 JSON 抽取 v1：384 条训练、100 条开发、200 条确认，另有同量数据的字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出实际命令、模型哈希、局限与结果。针对 v1 无槽误报，v2 SFT 与 v3 DPO 都按预先公开的方案在自然频率开发集上做纠错实验。v3 DPO 将无槽失败从 126/167 降至 28/167，但总体严格实体 F1 仅 47.12%，未达到预设门槛；新的 400 条确认集继续封存。[同样本继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)展示新增数据与偏好目标的探索性比较。[项目展示页](PORTFOLIO_CASE_STUDY.md)和[岗位证据](JOB_APPLICATION.md)说明可写进简历的结果与边界。仓库不含原始数据、权重或逐题预测。
 
 | 四槽抽取，确认集 200 条 | 严格实体 micro-F1 | 逐句全对 | 无槽失败（共 40 条） |
 | --- | ---: | ---: | ---: |
@@ -17,6 +17,10 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 ## v3：DPO 纠错的收益与召回代价
 
 从未用过的 MASSIVE 官方 train 原句组构造 256 对偏好样本，以 v2 SFT 为初始策略和冻结参考，在 CPU 上完成 64 步 DPO。相同 250 条开发集上，无槽失败从 v2 SFT 的 **126/167（75.45%）** 降至 **28/167（16.77%）**，配对下降 95% 区间为 **+50.90 至 +65.87 个百分点**；但阳性句 F1 从 **67.01%** 降至 **54.75%**。总体 F1 从 **42.17%** 到 **47.12%**，配对增量区间 **−1.67 至 +11.20 个百分点**，跨 0。总体 F1、阳性句 F1 和可靠总体改进三项预设门槛未通过，因此**不生成选择锁，也不打开确认集**。同量 BIO 开发集 F1 为 **61.76%**、无槽失败 **9/167**。训练样本、权重和最终保存精度的限制见 [v3 设计](reports/massive-slots-v3-design.md)、[复现步骤](SLOT_V3_RUNBOOK.md)与 [完整结果](reports/massive-slots-v3-study-summary.md)。
+
+## 同样本继续 SFT：探索性方法对照
+
+在已看过 v3 DPO 开发集后，我从同一 256 对偏好数据提取正确回答，按[事先记录的对照方案](reports/massive-slots-v3-matched-control-design.md)从同一 v2 adapter 继续 SFT 64 步。固定开发集上，继续 SFT 总体实体 F1 **49.24%**、阳性句 F1 **67.36%**、无槽失败 **78/167**。DPO 相对该对照将无槽失败进一步降至 **28/167**，但阳性句 F1 降至 **54.75%**，总体 F1 差值的配对 95% 区间为 **−8.05 至 +3.46 个百分点**。这只能解释当前开发集的权衡，不能把差异唯一归因为 DPO 损失，也不改变 v3 未过门槛及 400 条确认集封存的决定。[完整报告](reports/massive-slots-v3-matched-control-summary.md)
 
 ## 旧意图分类任务与人工复核服务
 

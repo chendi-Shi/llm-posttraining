@@ -39,3 +39,26 @@ TRL 会把起始 SFT adapter 复制为冻结 `ref`，再优化默认 adapter。�
 该入口只接受第 64 步训练清单与冻结资产，读取 v2 的 250 条开发集及其已保存的 v2 SFT 预测，输出聚合报告和本地逐题预测。全部门槛见 [v3 设计](reports/massive-slots-v3-design.md)：JSON／结构／复制合法率各不低于 95%、无槽失败率不高于 30%、总体严格实体 F1 不低于 55%、阳性子集 F1 不低于 60%，且相对 v2 SFT 的配对 F1 增量和无槽失败下降的 95% 区间下界均大于 0。
 
 **任何一项未达标即停止。**仅当全部达标，先冻结开发集报告、逐题预测、数据、模型和推理代码的 SHA-256，再另行执行一次确认集推理。确认集不得用于改偏好样本、步数或门槛。v3 增加了新训练句，不能将 v3 与 v2 差异单独归因为 DPO 目标的效果。
+
+## 4. 事后同样本继续 SFT 对照
+
+v3 DPO 未通过门槛后，才设计[同样本对照](reports/massive-slots-v3-matched-control-design.md)，因此它是**探索性开发集分析**，不能解锁确认集。先从已冻结偏好对中逐项提取 `prompt` 和正确 `chosen`，核对全部 256 条的模板和 completion 掩码：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_massive_slots_v3_matched_sft.py
+.\.venv\Scripts\python.exe scripts\check_sft_template_mask.py --train-file data/massive-zh/slots-v3/matched-sft.jsonl --all --max-length 256
+```
+
+派生训练文件 SHA-256 应为 `8de93fdabe1b580def8bb10bef6e6cdb05942ff621bc29c0e7a34db1f0eed25c`。首次训练在第 31 步后意外退出且没有恢复点；下面是按公开偏离记录从头完成的重跑命令，唯一训练计划变更是每 8 步保存完整检查点：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_sft.py --model models/Qwen2.5-0.5B-Instruct --init-adapter outputs/massive-slots-v2-sft-lr3e4-160 --train-file data/massive-zh/slots-v3/matched-sft.jsonl --output-dir outputs/massive-slots-v3-matched-sft-64-restart1 --max-steps 64 --max-length 256 --learning-rate 1e-5 --seed 20260930 --gradient-accumulation-steps 4 --save-steps 8
+```
+
+最终 adapter SHA-256 为 `97aa3eaf5ea19442f0c50bdd9048807b9de9a931fe86f17a11eb578e1e3343fc`，保存精度为 `torch.bfloat16`。这些指纹已在开发集推理前公开。固定对照评测命令如下；入口会校验训练清单、训练文件、基座和 tokenizer、adapter 及冻结参考预测的哈希，并拒绝重复写入已有报告：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\evaluate_massive_slots_v3_matched_control.py --expected-adapter-sha256 97aa3eaf5ea19442f0c50bdd9048807b9de9a931fe86f17a11eb578e1e3343fc --expected-adapter-dtype torch.bfloat16
+```
+
+已完成的[聚合结果](reports/massive-slots-v3-matched-control-summary.md)与[机器可读报告](reports/massive-slots-v3-matched-sft-dev.json)公开；逐题预测、原始数据和权重仍只保留本地。重新运行前需在独立目录重建数据与模型，不应覆盖本轮报告或拿 400 条确认集调整结论。
