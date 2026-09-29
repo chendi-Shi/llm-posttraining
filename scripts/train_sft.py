@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import importlib.metadata
+import json
+import time
 from pathlib import Path
 
 from datasets import load_dataset
@@ -17,17 +21,44 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-steps", type=int, default=100)
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--learning-rate", type=float, default=5e-5)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--gradient-accumulation-steps", type=int, default=4)
+    parser.add_argument("--save-steps", type=int, default=None)
+    parser.add_argument("--resume-from-checkpoint", default=None)
     parser.add_argument("--cache-dir", default="_tmp/hf-datasets")
     return parser.parse_args()
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def main() -> None:
     args = parse_args()
+    if args.max_steps < 1 or args.max_length < 1 or args.gradient_accumulation_steps < 1:
+        raise SystemExit("Steps, sequence length, and gradient accumulation must be positive")
+    if args.save_steps is not None and args.save_steps < 1:
+        raise SystemExit("--save-steps must be positive")
     configure_cpu()
     train_file = Path(args.train_file)
     if not train_file.is_file():
         raise SystemExit(f"SFT file not found: {train_file}")
 
+    source_sha256 = sha256_file(train_file)
+    model_dir = Path(args.model)
+    model_asset_sha256 = (
+        {
+            path.name: sha256_file(path)
+            for path in sorted((*model_dir.glob("*.safetensors"), model_dir / "tokenizer.json"))
+            if path.is_file()
+        }
+        if model_dir.is_dir()
+        else {}
+    )
     tokenizer = load_tokenizer(args.model)
     model = load_quantized_base(args.model)
     dataset = load_dataset(
@@ -44,12 +75,14 @@ def main() -> None:
         max_length=args.max_length,
         learning_rate=args.learning_rate,
         per_device_train_batch_size=1,
-        gradient_accumulation_steps=4,
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
         gradient_checkpointing=True,
         logging_steps=1,
         save_strategy="steps",
-        save_steps=max(1, args.max_steps // 2),
+        save_steps=args.save_steps or max(1, args.max_steps // 2),
         save_total_limit=2,
+        seed=args.seed,
+        data_seed=args.seed,
         report_to="none",
     )
     trainer = SFTTrainer(
@@ -59,9 +92,37 @@ def main() -> None:
         processing_class=tokenizer,
         peft_config=lora_config(),
     )
-    trainer.train()
+    started = time.perf_counter()
+    trainer.train(resume_from_checkpoint=args.resume_from_checkpoint)
+    train_seconds = time.perf_counter() - started
     trainer.save_model(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
+    output_dir = Path(args.output_dir)
+    manifest = {
+        "train_file": str(train_file),
+        "train_file_sha256": source_sha256,
+        "model": args.model,
+        "model_asset_sha256": model_asset_sha256,
+        "max_steps": args.max_steps,
+        "max_length": args.max_length,
+        "learning_rate": args.learning_rate,
+        "seed": args.seed,
+        "gradient_accumulation_steps": args.gradient_accumulation_steps,
+        "save_steps": args.save_steps or max(1, args.max_steps // 2),
+        "resume_from_checkpoint": args.resume_from_checkpoint,
+        "training_seconds": round(train_seconds, 2),
+        "global_step": trainer.state.global_step,
+        "package_versions": {
+            name: importlib.metadata.version(name)
+            for name in ("torch", "transformers", "trl", "peft", "bitsandbytes")
+        },
+    }
+    (output_dir / "run_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (output_dir / "trainer_log_history.json").write_text(
+        json.dumps(trainer.state.log_history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print(f"SFT adapter saved to {args.output_dir}")
 
 
