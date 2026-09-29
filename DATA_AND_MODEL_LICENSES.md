@@ -1,6 +1,6 @@
 # 数据、模型与发布材料
 
-本项目原创代码和文档采用 [Apache License 2.0](LICENSE)，版权声明见根目录 [NOTICE](NOTICE)。本文件记录中文意图分类实验所用的第三方材料；第三方数据和模型仍分别遵守下列许可，根目录代码许可不改变其条款。
+本项目原创代码和文档采用 [Apache License 2.0](LICENSE)，版权声明见根目录 [NOTICE](NOTICE)。本文件记录中文意图分类与四槽抽取实验所用的第三方材料；第三方数据和模型仍分别遵守下列许可，根目录代码许可不改变其条款。
 
 ## MASSIVE 1.0 中文数据
 
@@ -8,6 +8,7 @@
 - 数据许可：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)。请区分数据许可与 MASSIVE 仓库代码的 Apache-2.0 许可，见[官方 NOTICE](https://github.com/alexa/massive/blob/main/NOTICE.md)。
 - 版权及来源署名：MASSIVE © Amazon.com, Inc. or its affiliates。MASSIVE 源于 [SLURP](https://github.com/pswietojanski/slurp) 英文文本的翻译与本地化；研究引用见 [MASSIVE 论文](https://aclanthology.org/2023.acl-long.235/)和 [SLURP 论文](https://aclanthology.org/2020.emnlp-main.588/)。
 - 本项目的改动：Qwen SFT 实验从官方 `train` 按意图固定种子抽取 594 条；线性基线用官方 `train` 全部 11,514 条训练。两者均使用官方 `dev`、`test` 评测；测试与训练/开发文本存在重复，报告单列去重结果。确切 SFT 抽样规则见 `scripts/prepare_massive.py` 产生的 `data/massive-zh/manifest.json`；线性模型的训练与选择规则见 `scripts/evaluate_massive_linear.py` 和 `reports/massive-linear-dev.json`。
+- 四槽抽取研究也只从官方 `zh-CN` 数据派生。v1 从官方 `train` 建 384／100／200 的训练、开发、确认切分；v2 先排除旧项目用过的文本组及官方 `dev`／`test` 的强归一化重复组，再从官方 `train` 锁定 640／250／400 的新切分。两轮仅抽取 `date`、`time`、`place_name`、`person`，并将目标输出改为严格 JSON；具体过滤、分组、抽样和文件哈希见 [v1 报告](reports/massive-slots-study-summary.md)与 [v2 预先设计](reports/massive-slots-v2-design.md)。公开仓库仅保留聚合统计与哈希，不再分发派生原句。
 
 本仓库默认不提交原始归档或整理出的训练、开发、测试样本。如发布包含 MASSIVE 文本的材料，应保留官方数据归档内的 `LICENSE`、给出上述来源和版权署名、链接 CC BY 4.0，并说明抽样、清洗或其他改动。生成的 `data/massive-zh/MASSIVE-LICENSE.txt` 是官方归档内许可证的本地副本。服务文档也应列明训练数据来源。
 
