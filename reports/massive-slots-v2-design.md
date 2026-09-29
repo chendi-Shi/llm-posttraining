@@ -46,6 +46,14 @@ v1 QLoRA SFT 在富集目标槽位的 200 条确认集上取得严格实体 micr
 
 选择器还须核对 `run_manifest.json`：训练文件哈希、完成 160 步、训练种子、学习率、序列长度及保存步数必须与预定方案一致。v2 评测把基座和 adapter 目录中的全部直接文件逐一哈希，包括配置、tokenizer、聊天模板和权重；文件新增或修改都会使选择或确认门禁失败。确认评测只接受固定的锁与输出路径，比较脚本也复核全部依赖代码哈希、模型文件哈希和逐题预测文件哈希。以上检查在打开新确认集前完成。
 
+## 2026-09-29 运行偏离记录（开发集评估前）
+
+原定连续训练 160 步的进程在保存完整第 80 步检查点后意外结束，未留下可确认的异常原因。第 80 步检查点含 adapter、optimizer、scheduler、随机数状态和 `trainer_state.json`。在未评估 v2 开发集、未打开确认集前，决定使用 TRL 的 `resume_from_checkpoint` 从该检查点继续至原定第 160 步；数据、种子、学习率、最大长度和两个候选步数不变。选择器现在要求最终运行清单明确记录此恢复路径，并核对检查点状态为第 80/160 步。恢复过程的新增启动时间不应与一次连续训练的耗时混同。若恢复失败，将只报告开发阶段结果，不使用确认集。此偏离不作为模型表现改善的证据。
+
+```powershell
+python scripts/train_sft.py --train-file data/massive-zh/slots-v2/train.jsonl --output-dir outputs/massive-slots-v2-sft-lr3e4-160 --max-steps 160 --max-length 160 --learning-rate 0.0003 --seed 20260928 --save-steps 80 --resume-from-checkpoint outputs/massive-slots-v2-sft-lr3e4-160/checkpoint-80
+```
+
 ## 本地复现与当前验证
 
 ```powershell

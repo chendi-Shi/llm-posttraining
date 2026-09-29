@@ -41,6 +41,9 @@ class V2Fixture:
         (self.sft / "checkpoint-80").mkdir()
         (self.sft / "checkpoint-80" / "adapter_model.safetensors").write_bytes(b"step 80 fixture")
         (self.sft / "checkpoint-80" / "adapter_config.json").write_text('{"step":80}', encoding="utf-8")
+        (self.sft / "checkpoint-80" / "trainer_state.json").write_text(
+            json.dumps({"global_step": 80, "max_steps": 160}), encoding="utf-8"
+        )
         (self.sft / "adapter_model.safetensors").write_bytes(b"step 160 fixture")
         (self.sft / "adapter_config.json").write_text('{"step":160}', encoding="utf-8")
         self.code = root / "code.py"
@@ -76,6 +79,7 @@ class V2Fixture:
                 "tokenizer.json": sha256_file(self.model / "tokenizer.json"),
             },
             **EXPECTED_TRAINING,
+            "resume_from_checkpoint": str(self.sft / "checkpoint-80"),
             "package_versions": {name: "fixture" for name in
                                  ("torch", "transformers", "trl", "peft", "bitsandbytes")},
         }), encoding="utf-8")
@@ -271,6 +275,14 @@ class SelectMassiveSlotsV2Tests(unittest.TestCase):
         run["seed"] = 1
         self.fixture.run_manifest.write_text(json.dumps(run), encoding="utf-8")
         with self.assertRaisesRegex(SelectionError, "unexpected seed"):
+            self.fixture.run_selector()
+        self.assertFalse(self.fixture.lock.exists())
+
+    def test_training_must_resume_from_step80(self) -> None:
+        run = json.loads(self.fixture.run_manifest.read_text(encoding="utf-8"))
+        run["resume_from_checkpoint"] = None
+        self.fixture.run_manifest.write_text(json.dumps(run), encoding="utf-8")
+        with self.assertRaisesRegex(SelectionError, "resume from the recorded step-80"):
             self.fixture.run_selector()
         self.assertFalse(self.fixture.lock.exists())
 

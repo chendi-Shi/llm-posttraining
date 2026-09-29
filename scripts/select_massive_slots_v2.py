@@ -59,7 +59,6 @@ EXPECTED_TRAINING = {
     "seed": 20260928,
     "gradient_accumulation_steps": 4,
     "save_steps": 80,
-    "resume_from_checkpoint": None,
 }
 DEV_PREDICTIONS = {
     80: Path("_tmp/massive-slots-v2-v2_step80-dev-predictions.jsonl"),
@@ -359,6 +358,13 @@ def validate_training_manifest(
     for key, expected in EXPECTED_TRAINING.items():
         if run.get(key) != expected:
             raise SelectionError(f"SFT run manifest has unexpected {key}")
+    resume = run.get("resume_from_checkpoint")
+    checkpoint80 = path.parent / "checkpoint-80"
+    if not isinstance(resume, str) or not same_path(resume, checkpoint80):
+        raise SelectionError("SFT run must resume from the recorded step-80 checkpoint")
+    checkpoint_state = load_object(checkpoint80 / "trainer_state.json")
+    if checkpoint_state.get("global_step") != 80 or checkpoint_state.get("max_steps") != 160:
+        raise SelectionError("SFT resume checkpoint has an unexpected training step")
     assets = run.get("model_asset_sha256")
     if (not isinstance(assets, dict)
             or assets.get("model.safetensors") != model_hashes["model.safetensors"]

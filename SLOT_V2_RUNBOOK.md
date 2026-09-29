@@ -21,6 +21,12 @@ v2 脚本核对官方归档 SHA-256、旧意图训练文件、v1 三份划分及
 .\.venv\Scripts\python.exe scripts\train_sft.py --train-file data\massive-zh\slots-v2\train.jsonl --output-dir outputs\massive-slots-v2-sft-lr3e4-160 --max-steps 160 --max-length 160 --learning-rate 0.0003 --seed 20260928 --save-steps 80
 ```
 
+本次训练进程在第 80 步检查点保存后意外退出；原因未能确认。开发集评估前已在 `reports/massive-slots-v2-design.md` 记录偏离，并从保存的 optimizer、scheduler 和随机数状态恢复，继续执行原定的第 160 步。最终选择器须核对恢复路径和第 80 步状态。恢复命令：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_sft.py --train-file data\massive-zh\slots-v2\train.jsonl --output-dir outputs\massive-slots-v2-sft-lr3e4-160 --max-steps 160 --max-length 160 --learning-rate 0.0003 --seed 20260928 --save-steps 80 --resume-from-checkpoint outputs\massive-slots-v2-sft-lr3e4-160\checkpoint-80
+```
+
 在新 dev 上以相同 `batch-size 8`、`max-input-tokens 256`、`max-new-tokens 64` 评估第 80/160 步。v2 评测入口在生成前后核对基座、tokenizer 与 adapter 的 SHA-256，并把本地逐题预测文件 SHA-256 写入聚合报告；逐题预测只写到忽略的 `_tmp/`。旧 v1 SFT 只作为冻结参考，不参与 v2 检查点选择。
 
 ```powershell
