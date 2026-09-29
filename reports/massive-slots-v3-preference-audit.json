@@ -1,0 +1,26 @@
+{
+  "study": "MASSIVE zh-CN four-slot v3 train-only preference audit",
+  "pair_count": 256,
+  "pair_bucket_counts": {
+    "hard_negative": 96,
+    "pure_negative": 96,
+    "time": 16,
+    "date": 16,
+    "place_name": 16,
+    "person": 16
+  },
+  "rejected_sources": {
+    "model_error": 187,
+    "deterministic_fallback": 69
+  },
+  "rejected_parse_validity": {
+    "valid": 230,
+    "invalid": 26
+  },
+  "max_observed_pair_tokens": 145,
+  "v2_group_overlap_count": 0,
+  "candidate_file_sha256": "2fc7e03e67417b4817bfcc3a557d0f1e950015e141e8cfdf26664214bd2e0c0f",
+  "preference_file_sha256": "310c26b37fd7eee7cbfb4876def2d398fcd5f0d188a24da20b24aa474471c450",
+  "preference_manifest_sha256": "5f20af854896b61e38ad2eda3b73f49c195f58afda0a01a8bb1dff6b6007f33a",
+  "v2_manifest_sha256": "96d8f6501931a29569421de7edbc82912025150a379aa93796ed27d64ee5dd2c"
+}
