@@ -9,8 +9,6 @@ import json
 import time
 from pathlib import Path
 
-from safetensors import safe_open
-
 from compare_massive_slots import aligned_raw_outputs
 from compare_massive_slots_v2 import paired_no_slot_reduction, positive_only_metrics
 from evaluate_massive_slots import (
@@ -47,6 +45,8 @@ EXPECTED_DPO_ADAPTER_SHA256 = "634c83b63b840708e5d8ad63e710fe3a2f219924b3d4cad00
 
 
 def adapter_dtypes(path: Path) -> list[str]:
+    from safetensors import safe_open
+
     with safe_open(str(path), framework="pt", device="cpu") as archive:
         return sorted({str(archive.get_tensor(key).dtype) for key in archive.keys()})
 
