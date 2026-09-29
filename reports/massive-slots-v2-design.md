@@ -54,6 +54,8 @@ v1 QLoRA SFT 在富集目标槽位的 200 条确认集上取得严格实体 micr
 python scripts/train_sft.py --train-file data/massive-zh/slots-v2/train.jsonl --output-dir outputs/massive-slots-v2-sft-lr3e4-160 --max-steps 160 --max-length 160 --learning-rate 0.0003 --seed 20260928 --save-steps 80 --resume-from-checkpoint outputs/massive-slots-v2-sft-lr3e4-160/checkpoint-80
 ```
 
+续训完成后的权重审计发现两个候选各有 192 个 LoRA tensor：第 80 步保存为 `bfloat16`，第 160 步保存为 `float32`。TRL/PEFT 从第 80 步恢复时发生了保存精度变化；两个检查点的开发集选择仍按原门槛执行，但它们的差异不能单独解释为额外 80 步训练的效果。最终报告须列出这一混杂因素。
+
 ## 本地复现与当前验证
 
 ```powershell
