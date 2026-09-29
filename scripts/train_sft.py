@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 
 from datasets import load_dataset
+from peft import PeftModel
 from trl import SFTConfig, SFTTrainer
 
 from common import DEFAULT_MODEL, configure_cpu, load_quantized_base, load_tokenizer, lora_config
@@ -21,6 +22,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-steps", type=int, default=100)
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--learning-rate", type=float, default=5e-5)
+    parser.add_argument("--init-adapter", default=None,
+                        help="Continue training an existing LoRA adapter instead of initializing a new one")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--gradient-accumulation-steps", type=int, default=4)
     parser.add_argument("--save-steps", type=int, default=None)
@@ -43,12 +46,17 @@ def main() -> None:
         raise SystemExit("Steps, sequence length, and gradient accumulation must be positive")
     if args.save_steps is not None and args.save_steps < 1:
         raise SystemExit("--save-steps must be positive")
+    initial_adapter = Path(args.init_adapter) if args.init_adapter else None
+    if initial_adapter is not None and not (initial_adapter / "adapter_model.safetensors").is_file():
+        raise SystemExit(f"Initial adapter weights not found: {initial_adapter}")
     configure_cpu()
     train_file = Path(args.train_file)
     if not train_file.is_file():
         raise SystemExit(f"SFT file not found: {train_file}")
 
     source_sha256 = sha256_file(train_file)
+    initial_adapter_sha256 = (sha256_file(initial_adapter / "adapter_model.safetensors")
+                              if initial_adapter else None)
     model_dir = Path(args.model)
     model_asset_sha256 = (
         {
@@ -61,6 +69,8 @@ def main() -> None:
     )
     tokenizer = load_tokenizer(args.model)
     model = load_quantized_base(args.model)
+    if initial_adapter is not None:
+        model = PeftModel.from_pretrained(model, str(initial_adapter), is_trainable=True)
     dataset = load_dataset(
         "json",
         data_files=str(train_file),
@@ -90,19 +100,23 @@ def main() -> None:
         args=training_args,
         train_dataset=dataset,
         processing_class=tokenizer,
-        peft_config=lora_config(),
+        peft_config=None if initial_adapter is not None else lora_config(),
     )
     started = time.perf_counter()
     trainer.train(resume_from_checkpoint=args.resume_from_checkpoint)
     train_seconds = time.perf_counter() - started
     trainer.save_model(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
+    if initial_adapter is not None and sha256_file(initial_adapter / "adapter_model.safetensors") != initial_adapter_sha256:
+        raise ValueError("Initial adapter changed during continued SFT")
     output_dir = Path(args.output_dir)
     manifest = {
         "train_file": str(train_file),
         "train_file_sha256": source_sha256,
         "model": args.model,
         "model_asset_sha256": model_asset_sha256,
+        "initial_adapter": str(initial_adapter) if initial_adapter else None,
+        "initial_adapter_sha256": initial_adapter_sha256,
         "max_steps": args.max_steps,
         "max_length": args.max_length,
         "learning_rate": args.learning_rate,
