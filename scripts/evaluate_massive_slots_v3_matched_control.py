@@ -29,7 +29,7 @@ from v2_model_assets import hash_inference_files
 
 
 BASE = Path("models/Qwen2.5-0.5B-Instruct")
-ADAPTER = Path("outputs/massive-slots-v3-matched-sft-64")
+ADAPTER = Path("outputs/massive-slots-v3-matched-sft-64-restart1")
 TRAIN = Path("data/massive-zh/slots-v3/matched-sft.jsonl")
 DEV = Path("data/massive-zh/slots-v2/dev.jsonl")
 V2_REPORT = Path("reports/massive-slots-v2-sft-step160-dev.json")
@@ -55,7 +55,7 @@ def check_run(run: dict, hashes: dict[str, str], expected_adapter: str,
         "learning_rate": 1e-5,
         "seed": 20260930,
         "gradient_accumulation_steps": 4,
-        "save_steps": 32,
+        "save_steps": 8,
     }
     if any(run.get(key) != value for key, value in expected.items()):
         raise ValueError("Continued SFT run differs from the frozen control plan")
