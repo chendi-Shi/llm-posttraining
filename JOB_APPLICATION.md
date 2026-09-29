@@ -1,10 +1,10 @@
 # 后训练算法实习／校招：项目证据与面试说明
 
-更新日期：2026-09-29。本页面向后训练算法实习和校招申请，区分**已完成的 v1 实验**与**进行中的 v2 实验**。简历数字只取自冻结评测。若公开 GitHub 仓库尚未同步相应报告，应先核对仓库文件，再使用下文的项目表述。
+更新日期：2026-09-29。本页面向后训练算法实习和校招申请，区分**完成确认评测的 v1**与**开发集门槛未通过的 v2**。简历数字只取自对应的已完成评测，并标明开发集或确认集。使用下文表述前，应核对公开仓库的相应报告。
 
 ## 30 秒介绍
 
-我在 16 GB 内存、无独立 GPU 的电脑上，对 Qwen2.5-0.5B-Instruct 做 4-bit QLoRA SFT，研究中文语音助理请求中 `date`、`time`、`place_name`、`person` 四类槽位的严格 JSON 抽取。使用许可明确的 MASSIVE 1.0 `zh-CN` 数据，按原句分组切分、冻结检查点选择，并与同训练数据的字符 BIO 模型比较。v1 确认集上，SFT 的实体 micro-F1 从基座 **2.55%** 提升到 **60.43%**；但 40 条无目标槽位句**全部失败**（34 条有效误报、6 条输出无效），所以没有把它作为自动抽取服务。针对这个失败，v2 预先设计了更严格的去重、自然频率留出和负例训练；v2 的确认结果尚未产生。
+我在 16 GB 内存、无独立 GPU 的电脑上，对 Qwen2.5-0.5B-Instruct 做 4-bit QLoRA SFT，研究中文语音助理请求中 `date`、`time`、`place_name`、`person` 四类槽位的严格 JSON 抽取。使用许可明确的 MASSIVE 1.0 `zh-CN` 数据，按原句分组切分、冻结检查点选择，并与同训练数据的字符 BIO 模型比较。v1 确认集上，SFT 的实体 micro-F1 从基座 **2.55%** 提升到 **60.43%**；但 40 条无目标槽位句**全部失败**。针对这个失败，v2 预先锁定自然频率留出和负例训练；第 160 步开发集 F1 为 **42.17%**、无槽失败 **126/167**，未通过门槛，因此没有打开新确认集，也没有把 SFT 用于自动抽取。
 
 ## 与岗位相关的可核对证据
 
@@ -13,7 +13,7 @@
 | 数据设计与治理 | [v1 预注册方案](SLOT_RESEARCH.md)、[v2 冻结设计](reports/massive-slots-v2-design.md)记录数据来源、许可、分组去重、切分、哈希和确认集使用规则 | v1 按目标槽位富集，不能代表真实请求比例；v2 仍是 MASSIVE 同源数据 |
 | 参数高效后训练 | [训练脚本](scripts/train_sft.py)、[v1 运行清单](reports/massive-slots-training-provenance.json)记录 4-bit QLoRA、LoRA 配置、训练步数和环境 | 模型为 0.5B，单机 CPU；不等于 7B／多卡／分布式训练经验 |
 | 评测与模型选择 | [v1 选择锁](reports/massive-slots-selection-lock.json)、[确认集比较](reports/massive-slots-confirmation-comparison.json)记录固定检查点、严格实体 F1、逐句正确率、有效率和配对 bootstrap | 确认集只对本轮模型选择留出；不能称为完全无污染或线上盲测 |
-| 强基线与失败归因 | [槽位研究报告](reports/massive-slots-study-summary.md)公开同量 BIO 基线、无槽失败与时间槽弱项；[v2 方案](reports/massive-slots-v2-design.md)把无槽失败设为门槛 | v1 BIO 的 F1 点估计较高，但与 SFT 的配对差值区间跨 0；v2 尚无最终成绩 |
+| 强基线与失败归因 | [v1 研究报告](reports/massive-slots-study-summary.md)和 [v2 开发集报告](reports/massive-slots-v2-study-summary.md)公开同量 BIO 基线、无槽误报与失败门禁 | v1 BIO 的 F1 点估计较高，但与 SFT 的配对差值区间跨 0；v2 未进入确认集，不能声称最终改进 |
 | SFT/DPO 完整实验链 | [意图分类对照](reports/massive-test-comparison.json)和 [DPO 开发集比较](reports/massive-dpo-dev-comparison.json)保留 SFT 小幅收益与 DPO 负结果 | DPO 没有达到开发集门槛，未进入官方 test；没有奖励模型、PPO／GRPO 或 Agentic RL 实验 |
 | 工程交付 | [人工复核服务说明](SERVICE_RUNBOOK.md)、[容器部署说明](CLOUD_DEPLOY.md)和 [上线验收](RELEASE_READINESS.md)说明本地服务与部署包 | 服务使用**另一个意图分类小模型**，不是槽位 SFT；尚无云服务器、对外服务或线上反馈 |
 
@@ -25,11 +25,11 @@
 
 **旧意图分类实验。** 使用 594 条 SFT 训练样本，官方 test 的 macro-F1 从基座 **16.15%** 到 SFT **21.18%**（差值 **+5.03 个百分点**，配对 95% 区间 **+3.45 至 +6.70**）。DPO 相对 SFT 的开发集差值仅 **+1.35 个百分点**，区间 **−2.99 至 +5.61**，未达到预设收益门槛，所以没有在官方 test 上继续试。另一个用于人工复核服务的线性分类模型使用 **11,514** 条训练样本，不能与上述 594 条 SFT 当成等量模型比较。[意图任务结果](reports/massive-test-comparison.json)、[DPO 决策](reports/massive-dpo-dev-comparison.json)、[服务模型摘要](reports/massive-linear-test-summary.md)
 
-## v2 正在检验什么
+## v2 开发阶段的停止决定
 
-针对 v1 在无槽句上的失败，v2 已冻结新的 [数据与测评方案](reports/massive-slots-v2-design.md)和 [复现步骤](SLOT_V2_RUNBOOK.md)：排除旧训练／评测文本组及官方 dev/test 的强归一化重复组；先以固定哈希抽取自然频率开发集 **250** 条和确认集 **400** 条，再构造含目标阳性与两种负例的训练集 **640** 条。模型保持同一基座和 QLoRA 方法，预定比较第 80／160 步。开发集必须同时满足 JSON、结构、复制合法率各 ≥95% 和无槽失败率 ≤30%，才允许冻结模型并打开新确认集；否则记录失败，不使用确认集调参。主要确认比较预先设为 v2 SFT 对冻结 v1 SFT，并报告同量训练 BIO 参考。**目前不能写 v2 改进了 F1 或拒判。**
+针对 v1 在无槽句上的失败，v2 先冻结 [数据与测评方案](reports/massive-slots-v2-design.md)和 [复现步骤](SLOT_V2_RUNBOOK.md)：排除旧训练／评测文本组及官方 dev/test 的强归一化重复组；先以固定哈希抽取自然频率开发集 **250** 条和确认集 **400** 条，再构造含目标阳性与两种负例的训练集 **640** 条。预定门槛为开发集 JSON、结构、复制合法率各 ≥95%，无槽失败率 ≤30%。第 80、160 步均未通过。第 160 步对冻结 v1 的开发集 F1 点估计仅 **+2.40 个百分点**，配对 95% 区间 **−1.26 至 +6.54**；无槽失败虽然下降 **24.55 个百分点**，绝对值仍为 **75.45%**。同量 BIO 为 **61.76%** F1、**5.39%** 无槽失败。选择器拒绝写锁，400 条确认集未评测。[完整开发集结果](reports/massive-slots-v2-study-summary.md)
 
-v2 同时改变训练集大小、抽取样本和负例比例，因此即使后续有效，也只能归因于整个 v2 方案，不能单独归因于“增加负例”。新确认集仍来自 MASSIVE，不能代替真实流量与未知请求评测。
+v2 同时改变训练集大小、抽取样本和负例比例，不能单独归因于“增加负例”。训练在第 80 步检查点后意外中断并恢复，恢复后 adapter 保存精度从 `bfloat16` 变为 `float32`；也不能把两个检查点的差异只归因于步数。新确认集仍来自 MASSIVE，不能代替真实流量与未知请求评测。
 
 ## 简历可用表述
 
@@ -37,9 +37,9 @@ v2 同时改变训练集大小、抽取样本和负例比例，因此即使后�
 
 > 在 16 GB 内存的 CPU 环境中完成 Qwen2.5-0.5B-Instruct 4-bit QLoRA SFT 与中文四槽抽取评测；按原句去重和开发集预设规则选择检查点，确认集严格实体 F1 从基座 2.55% 提升至 60.43%（配对 95% 区间 +50.39 至 +64.44 个百分点），并报告同量 BIO 基线 68.05% F1。
 >
-> 建立数据／权重哈希、确认集门禁、严格 JSON 与原文复制检查、配对 bootstrap 和 Bad Case 分析；发现 SFT 对 40 条无目标句全部失败，据此冻结自然频率留出与负例训练的 v2 实验方案。旧意图任务的 DPO 未达开发集门槛，保留负结果。
+> 建立数据／权重哈希、确认集门禁、严格 JSON 与原文复制检查、配对 bootstrap 和 Bad Case 分析；发现 v1 SFT 对 40 条无目标句全部失败，并在 v2 自然频率开发集上验证负例训练后仍有 126/167 条无槽失败，按预定门槛拒绝打开确认集；旧意图任务的 DPO 也未达开发集门槛，保留负结果。
 
-面试时建议展示 [训练代码](scripts/train_sft.py)、[v1 模型选择锁](reports/massive-slots-selection-lock.json)、[研究报告](reports/massive-slots-study-summary.md)及 [v2 预设方案](reports/massive-slots-v2-design.md)。被问到“为何没有直接上线”时，可用 **40/40 无槽失败、富集确认集、缺少真实请求验证** 三项具体证据解释。被问到“为何还做 v2”时，可说明新确认集在训练前锁定、改用自然频率留出，并为拒判设了明确开发集门槛；等结果出来后再判断方案是否有效。
+面试时建议展示 [训练代码](scripts/train_sft.py)、[v1 模型选择锁](reports/massive-slots-selection-lock.json)、[v1 研究报告](reports/massive-slots-study-summary.md)、[v2 预设方案](reports/massive-slots-v2-design.md)及 [v2 停止报告](reports/massive-slots-v2-study-summary.md)。被问到“为何没有直接上线”时，可用 **v1 的 40/40 无槽失败、v2 的 126/167 无槽失败、缺少真实请求验证** 解释。v2 展示的是能执行失败门禁并保留确认集，而不是性能成功。
 
 ## 投递定位
 

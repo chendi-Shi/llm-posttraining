@@ -1,0 +1,25 @@
+{
+  "train_file": "data\\massive-zh\\slots-v2\\train.jsonl",
+  "train_file_sha256": "08916652746cc880aaa7fe17cd999f4bfbeb3834e55e5c43fbbe8148233372cd",
+  "model": "models/Qwen2.5-0.5B-Instruct",
+  "model_asset_sha256": {
+    "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+  },
+  "max_steps": 160,
+  "max_length": 160,
+  "learning_rate": 0.0003,
+  "seed": 20260928,
+  "gradient_accumulation_steps": 4,
+  "save_steps": 80,
+  "resume_from_checkpoint": "outputs\\massive-slots-v2-sft-lr3e4-160\\checkpoint-80",
+  "training_seconds": 4980.07,
+  "global_step": 160,
+  "package_versions": {
+    "torch": "2.14.0+cpu",
+    "transformers": "5.17.0",
+    "trl": "1.13.0",
+    "peft": "0.21.0",
+    "bitsandbytes": "0.50.2"
+  }
+}

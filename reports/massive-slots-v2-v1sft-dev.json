@@ -1,0 +1,126 @@
+{
+  "examples": 250,
+  "metric_definition": {
+    "entity_match": "multiset of (type, literal value) per utterance",
+    "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+    "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+    "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+  },
+  "gold_slot_count": 106,
+  "predicted_slot_count": 246,
+  "micro": {
+    "tp": 70,
+    "fp": 176,
+    "fn": 36,
+    "precision": 0.2845528455284553,
+    "recall": 0.660377358490566,
+    "f1": 0.3977272727272727
+  },
+  "micro_f1": 0.3977272727272727,
+  "per_type": {
+    "date": {
+      "tp": 24,
+      "fp": 55,
+      "fn": 13,
+      "precision": 0.3037974683544304,
+      "recall": 0.6486486486486487,
+      "f1": 0.41379310344827586
+    },
+    "time": {
+      "tp": 6,
+      "fp": 9,
+      "fn": 13,
+      "precision": 0.4,
+      "recall": 0.3157894736842105,
+      "f1": 0.35294117647058826
+    },
+    "place_name": {
+      "tp": 29,
+      "fp": 41,
+      "fn": 6,
+      "precision": 0.4142857142857143,
+      "recall": 0.8285714285714286,
+      "f1": 0.5523809523809524
+    },
+    "person": {
+      "tp": 11,
+      "fp": 71,
+      "fn": 4,
+      "precision": 0.13414634146341464,
+      "recall": 0.7333333333333333,
+      "f1": 0.2268041237113402
+    }
+  },
+  "macro_f1": 0.3864798390027892,
+  "sentence_exact_accuracy": 0.208,
+  "sentence_exact_count": 52,
+  "json_valid_rate": 1.0,
+  "schema_valid_rate": 0.964,
+  "copy_valid_rate": 0.884,
+  "invalid_output_count": 29,
+  "error_counts": {
+    "invalid_slot_type_or_value": 9,
+    "value_not_copied_from_utterance": 20
+  },
+  "no_slot_examples": 167,
+  "no_slot_false_positive_count": 144,
+  "no_slot_false_positive_rate": 0.8622754491017964,
+  "no_slot_invalid_output_count": 23,
+  "no_slot_failure_rate": 1.0,
+  "bootstrap": {
+    "unit": "normalized_utterance_group",
+    "clusters": 250,
+    "samples": 1000,
+    "seed": 20260929,
+    "confidence": 0.95,
+    "micro_f1_ci95": [
+      0.3272480087887943,
+      0.46368715083798884
+    ],
+    "sentence_exact_ci95": [
+      0.16,
+      0.26
+    ]
+  },
+  "task": "MASSIVE 1.0 zh-CN four-slot copy-only JSON extraction",
+  "role": "dev",
+  "system": "v1",
+  "source_partition": "train",
+  "eval_file": "data\\massive-zh\\slots-v2\\dev.jsonl",
+  "eval_file_sha256": "354c8cb707813f2d148d06e905e9a169ba8606a3d8cba51f857e928dc17ce912",
+  "study_manifest_sha256": "96d8f6501931a29569421de7edbc82912025150a379aa93796ed27d64ee5dd2c",
+  "source_sha256": "7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8",
+  "model": "models\\Qwen2.5-0.5B-Instruct",
+  "adapter": "outputs\\massive-slots-sft-lr3e4-96",
+  "frozen_model_files_sha256": {
+    "base/config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+    "base/configuration.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "base/generation_config.json": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+    "base/LICENSE": "ff363795c651ab381e0e74c09c9afb5af5b4c78f84ec43421693ec371769b264",
+    "base/merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "base/tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "base/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "adapter/adapter_config.json": "55d2665f159942b68e4a4db678e5fc35a59cb5ff4b198027d507168a220a1a79",
+    "adapter_model.safetensors": "d5a5dd27dbe4e05bfa171e709378a9432e0b3cad2faba44bc2e8970016879c48",
+    "adapter/chat_template.jinja": "8aa40ce145adb73cb3a75194dc0224702a95850ec5275cabb728496bbd749fc6",
+    "adapter/README.md": "91ce4901fde3366626a02e16520b86f0bcfba41cb89a9f44df4d2092d3891ab7",
+    "adapter/run_manifest.json": "84cd81b72e9ac78e8441c1eac2378750a0225534105f08b6ef6586c9a241d6c2",
+    "adapter/tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+    "adapter/tokenizer_config.json": "1f18fb516a5b9ec1286b09ef8df6cbe736ad8298c77d99953d85f182572b273e",
+    "adapter/trainer_log_history.json": "43de6e2b17ac98cb402eced6928a415f9cb807468fe4d9f36c73a634026581e2",
+    "adapter/training_args.bin": "09bbfd40f44ce468ed5b2c9847722ca591a22ba8ca75620bf6186562882fc02a"
+  },
+  "selection_lock_sha256": null,
+  "prediction_file_sha256": "620f3e5ed1772b78e889e097aace41a1a12be48544bd6450d11df34a7e5e9077",
+  "elapsed_seconds": 1343.09,
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "do_sample": false,
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 104
+  }
+}

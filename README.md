@@ -1,6 +1,6 @@
 # 本地大模型后训练：中文结构化抽取与意图分类
 
-本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，构造许可清楚的数据、冻结模型选择、严格评测，并保留负结果。已完成的主研究是 MASSIVE 1.0 中文四槽 JSON 抽取 v1：384 条训练、100 条开发、200 条确认，另有同量数据的字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出实际命令、模型哈希、局限与结果。针对 v1 无槽误报，已先行公开 [v2 数据与测评方案](reports/massive-slots-v2-design.md)及[运行步骤](SLOT_V2_RUNBOOK.md)；v2 训练尚未产生最终成绩。求职视角见 [岗位证据](JOB_APPLICATION.md)。仓库不含原始数据、权重或逐题预测。
+本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，构造许可清楚的数据、冻结模型选择、严格评测，并保留负结果。已完成的主研究是 MASSIVE 1.0 中文四槽 JSON 抽取 v1：384 条训练、100 条开发、200 条确认，另有同量数据的字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出实际命令、模型哈希、局限与结果。针对 v1 无槽误报，已先行公开 [v2 数据与测评方案](reports/massive-slots-v2-design.md)、[运行步骤](SLOT_V2_RUNBOOK.md)及[开发集失败报告](reports/massive-slots-v2-study-summary.md)：两个 v2 SFT 检查点均未通过门槛，新的确认集保持未打开。求职视角见 [岗位证据](JOB_APPLICATION.md)。仓库不含原始数据、权重或逐题预测。
 
 | 四槽抽取，确认集 200 条 | 严格实体 micro-F1 | 逐句全对 | 无槽失败（共 40 条） |
 | --- | ---: | ---: | ---: |
@@ -12,7 +12,7 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 
 ## v2：自然频率留出与无槽失败修复
 
-新数据集仅用 MASSIVE 官方中文 train，排除旧项目全部训练／评测原句组及官方 dev/test 的强归一化重复组。先锁定不按标签重抽的开发集 250 条、确认集 400 条，再构造 640 条含目标槽、困难负例和纯负例的训练集。预定比较同一 Qwen 基座的第 80／160 步 SFT；只有开发集格式与复制合法率均达到 95%，且无槽失败率不高于 30%，才允许打开一次新确认集。主要比较固定为 v2 SFT 对冻结 v1 SFT，字符 BIO 为参考。完整切分、哈希、门禁和统计规则见[预先设计](reports/massive-slots-v2-design.md)。**此处不预写 v2 改进结论。**
+新数据集仅用 MASSIVE 官方中文 train，排除旧项目全部训练／评测原句组及官方 dev/test 的强归一化重复组。先锁定不按标签重抽的开发集 250 条、确认集 400 条，再构造 640 条含目标槽、困难负例和纯负例的训练集。预定比较同一 Qwen 基座的第 80／160 步 SFT；只有开发集 JSON、结构与复制合法率均达到 95%，且无槽失败率不高于 30%，才允许打开一次新确认集。第 160 步开发集实体 F1 **42.17%**、无槽失败 **126/167**，复制合法率 **91.2%**；同量 BIO 为 **61.76%** F1、**9/167** 无槽失败。选择器拒绝两个 SFT 候选，**没有生成选择锁，也没有评测 400 条确认集**。完整数据、偏离记录和开发集结论见[预先设计](reports/massive-slots-v2-design.md)与[结果报告](reports/massive-slots-v2-study-summary.md)。
 
 ## 旧意图分类任务与人工复核服务
 
