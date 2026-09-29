@@ -18,6 +18,10 @@ jobs:
           python-version: '3.10'
       - name: Compile project scripts
         run: python -m compileall -q scripts tests
+      - name: Install lightweight test dependencies
+        run: python -m pip install "scikit-learn>=1.5,<2"
+      - name: Run offline unit tests
+        run: python -m unittest discover -s tests -v
       - name: Check public release contents
         run: python scripts/check_release_tree.py
       - name: Run offline service contract tests
