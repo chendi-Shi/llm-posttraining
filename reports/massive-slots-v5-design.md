@@ -10,7 +10,7 @@
 
 `scripts/prepare_massive_slots_v5_test.py` 固定种子 `20261002`，只从 MASSIVE 1.0 `zh-CN` 官方 train 选择 600 个**新**强归一化原句组作为自然频率测试。先排除官方 dev/test、旧意图训练、v1、v2 的 1,290 组、v3 的 576 个候选组，以及 v4 的全部 906 组（包括它未读取的确认集）；样本只在哈希排序后按原始频率抽取，不按标签重抽。v2/v4 的两个 400 条确认集继续封存。本轮测试集的 manifest 与文件 SHA-256 会在任何逐条测试推理前公开，之后只允许一次推理。测试样本、逐条预测和模型权重都保留在 Git 忽略目录。
 
-冻结 BIO 模型 `outputs/massive-slots-v2-bio.joblib` SHA-256 为 `0d7a7fad835eea383223a4f9c173e42488a02416add660ef8171141d7c361fa`。冻结 v4 DPO adapter SHA-256 为 `ed76990eef5bf7b89e2ce01ba516bbb5455de4c91e1242dc74c164d6603f8a6f`，Qwen2.5-0.5B-Instruct 基座和 tokenizer 分别为 `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe`、`c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539`。DPO 生成固定为 batch 8、输入上限 256、新 token 上限 64、自由贪心。BIO 沿用冻结的 v2 训练权重，不重训。模型、规则和代码指纹须在测试前写入选择锁并发布。
+冻结 BIO 模型 `outputs/massive-slots-v2-bio.joblib` SHA-256 为 `0d7a7fad835eea383223a4f9c173e42488a02416addd660ef8171141d7c361fa`。冻结 v4 DPO adapter SHA-256 为 `ed76990eef5bf7b89e2ce01ba516bbb5455de4c91e1242dc74c164d6603f8a6f`，Qwen2.5-0.5B-Instruct 基座和 tokenizer 分别为 `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe`、`c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539`。DPO 生成固定为 batch 8、输入上限 256、新 token 上限 64、自由贪心。BIO 沿用冻结的 v2 训练权重，不重训。模型、规则和代码指纹须在测试前写入选择锁并发布。
 
 测试主指标是 `(type, 原文逐字值)` 多重集的严格实体 micro-F1，固定比较混合推理器减 BIO。按原句组配对 bootstrap 2,000 次，种子 `20261002`。**只有同时满足**混合 F1 ≥60%、阳性子集 F1 ≥60%、无槽失败率 ≤20%、JSON／结构／复制合法率各 ≥95%，且相对 BIO 的 F1 差值 95% 区间下界 >0，才称为独立确认的性能提升。另报告 BIO、原 v4 DPO 及混合系统的所有指标与逐句全对率，不因测试结果修改阈值、规则或模型。若未通过，保留失败报告，继续以冻结 BIO 为该槽位任务最可靠的当前参考。
 
@@ -19,3 +19,5 @@
 ## 抽样后、推理前的数据指纹
 
 按上述固定代码和种子已抽样 600 组，其中阳性 171 组；未运行测试推理或逐条评分。`data/massive-zh/slots-v5/manifest.json` 的 SHA-256 为 **`e4531ab27746a0cfe21dc0219331f5cc8237e614bb4c7090b355000fdce1d453`**，`test.jsonl` 的 SHA-256 为 **`afd5655d9d7e7092ae3c7798179578fc93c3e5d4a88939e9fbfb1d5978459b3c`**。确认入口必须校验这两个指纹与 600 个组哈希，且拒绝覆盖已有结果。
+
+测试前校验发现上文 BIO SHA-256 最初公开时漏写一个十六进制 `d`，导致指纹只有 63 位；已对照本地权重文件改为完整 64 位。此时尚未读取测试原句或运行推理，阈值、数据、模型和成功门槛均未更改。错误的未发布选择锁作废，随后以修正后的代码重新生成并公开锁。
