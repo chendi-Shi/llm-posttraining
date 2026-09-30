@@ -1,0 +1,349 @@
+{
+  "study": "MASSIVE zh-CN four-slot v5 independent test of BIO plus confidence-gated DPO",
+  "role": "independent_test",
+  "selection_lock_sha256": "d49516f8b9fe5a3b7b784a092fe7e975d8f4125249539ddad8d699c31296fd23",
+  "test_manifest_sha256": "e4531ab27746a0cfe21dc0219331f5cc8237e614bb4c7090b355000fdce1d453",
+  "test_file_sha256": "afd5655d9d7e7092ae3c7798179578fc93c3e5d4a88939e9fbfb1d5978459b3c",
+  "bio_model_sha256": "0d7a7fad835eea383223a4f9c173e42488a02416addd660ef8171141d7c361fa",
+  "dpo_inference_files_sha256": {
+    "base/config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+    "base/configuration.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "base/generation_config.json": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+    "base/LICENSE": "ff363795c651ab381e0e74c09c9afb5af5b4c78f84ec43421693ec371769b264",
+    "base/merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "base/tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "base/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "adapter/adapter_config.json": "8d4471a0f349ec79bc65b3c4808e1e203bf3b923bf20339e75ae230ff1e6607a",
+    "adapter_model.safetensors": "ed76990eef5bf7b89e2ce01ba516bbb5455de4c91e1242dc74c164d6603f8a6f",
+    "adapter/chat_template.jinja": "8aa40ce145adb73cb3a75194dc0224702a95850ec5275cabb728496bbd749fc6",
+    "adapter/README.md": "ea29a7a76b349bf6e1457dfae59280460295074fdfa058a916c92a3b1acec065",
+    "adapter/run_manifest.json": "fca68dc92c09fb38487f0e9ee1da799dbdd7a6c79ffe9481f6e07f0a985c5ad7",
+    "adapter/tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+    "adapter/tokenizer_config.json": "1f18fb516a5b9ec1286b09ef8df6cbe736ad8298c77d99953d85f182572b273e",
+    "adapter/trainer_log_history.json": "26999a42ecaec4d88238b68e19365633c977d2a9a5e65cf7de5bf060e1e487c9",
+    "adapter/training_args.bin": "5a0e17b0da59aa3817a37df314bf0d5b907ddbd1d26a82aeee553e6b277f4456"
+  },
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 104
+  },
+  "confidence_threshold": -0.08,
+  "confidence_scored_nonempty": 373,
+  "hybrid_replaced_examples": 93,
+  "prediction_file_sha256": {
+    "bio": "cf9c3d8974176951cd47d84c3af102a06d190ae2ec58d251e5338b618cedefb8",
+    "v4_dpo": "6534ec8726e2e05c6ad963939c8458d944dc5354bf72606e251b8e9f60621991",
+    "hybrid": "172b03e9e13608d214c61ec52a0d3c199b9b8655ed40381db3138b4a42110f3c",
+    "confidence": "8828468613e035b37799095fa785d2a9c9a9b93665096058a607fcdca007670e"
+  },
+  "elapsed_seconds": 2065.5,
+  "bio": {
+    "metrics": {
+      "examples": 600,
+      "metric_definition": {
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+        "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+        "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+      },
+      "gold_slot_count": 204,
+      "predicted_slot_count": 198,
+      "micro": {
+        "tp": 100,
+        "fp": 98,
+        "fn": 104,
+        "precision": 0.5050505050505051,
+        "recall": 0.49019607843137253,
+        "f1": 0.4975124378109453
+      },
+      "micro_f1": 0.4975124378109453,
+      "per_type": {
+        "date": {
+          "tp": 60,
+          "fp": 45,
+          "fn": 34,
+          "precision": 0.5714285714285714,
+          "recall": 0.6382978723404256,
+          "f1": 0.6030150753768844
+        },
+        "time": {
+          "tp": 12,
+          "fp": 20,
+          "fn": 9,
+          "precision": 0.375,
+          "recall": 0.5714285714285714,
+          "f1": 0.4528301886792453
+        },
+        "place_name": {
+          "tp": 12,
+          "fp": 20,
+          "fn": 40,
+          "precision": 0.375,
+          "recall": 0.23076923076923078,
+          "f1": 0.2857142857142857
+        },
+        "person": {
+          "tp": 16,
+          "fp": 13,
+          "fn": 21,
+          "precision": 0.5517241379310345,
+          "recall": 0.43243243243243246,
+          "f1": 0.48484848484848486
+        }
+      },
+      "macro_f1": 0.456602008654725,
+      "sentence_exact_accuracy": 0.775,
+      "sentence_exact_count": 465,
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 1.0,
+      "copy_valid_rate": 1.0,
+      "invalid_output_count": 0,
+      "error_counts": {},
+      "no_slot_examples": 429,
+      "no_slot_false_positive_count": 34,
+      "no_slot_false_positive_rate": 0.07925407925407925,
+      "no_slot_invalid_output_count": 0,
+      "no_slot_failure_rate": 0.07925407925407925,
+      "bootstrap": {
+        "unit": "normalized_utterance_group",
+        "clusters": 600,
+        "samples": 1000,
+        "seed": 20261002,
+        "confidence": 0.95,
+        "micro_f1_ci95": [
+          0.4329209711585465,
+          0.5636451674783265
+        ],
+        "sentence_exact_ci95": [
+          0.7433333333333333,
+          0.8083333333333333
+        ]
+      }
+    },
+    "positive_only": {
+      "examples": 171,
+      "micro_f1": 0.5524861878453039,
+      "sentence_exact_accuracy": 0.4093567251461988
+    }
+  },
+  "v4_dpo": {
+    "metrics": {
+      "examples": 600,
+      "metric_definition": {
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+        "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+        "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+      },
+      "gold_slot_count": 204,
+      "predicted_slot_count": 401,
+      "micro": {
+        "tp": 126,
+        "fp": 275,
+        "fn": 78,
+        "precision": 0.314214463840399,
+        "recall": 0.6176470588235294,
+        "f1": 0.41652892561983473
+      },
+      "micro_f1": 0.41652892561983473,
+      "per_type": {
+        "date": {
+          "tp": 63,
+          "fp": 106,
+          "fn": 31,
+          "precision": 0.3727810650887574,
+          "recall": 0.6702127659574468,
+          "f1": 0.4790874524714829
+        },
+        "time": {
+          "tp": 5,
+          "fp": 8,
+          "fn": 16,
+          "precision": 0.38461538461538464,
+          "recall": 0.23809523809523808,
+          "f1": 0.29411764705882354
+        },
+        "place_name": {
+          "tp": 31,
+          "fp": 69,
+          "fn": 21,
+          "precision": 0.31,
+          "recall": 0.5961538461538461,
+          "f1": 0.40789473684210525
+        },
+        "person": {
+          "tp": 27,
+          "fp": 92,
+          "fn": 10,
+          "precision": 0.226890756302521,
+          "recall": 0.7297297297297297,
+          "f1": 0.34615384615384615
+        }
+      },
+      "macro_f1": 0.3818134206315644,
+      "sentence_exact_accuracy": 0.46,
+      "sentence_exact_count": 276,
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 0.9633333333333334,
+      "copy_valid_rate": 0.93,
+      "invalid_output_count": 42,
+      "error_counts": {
+        "invalid_slot_type_or_value": 22,
+        "value_not_copied_from_utterance": 20
+      },
+      "no_slot_examples": 429,
+      "no_slot_false_positive_count": 220,
+      "no_slot_false_positive_rate": 0.5128205128205128,
+      "no_slot_invalid_output_count": 29,
+      "no_slot_failure_rate": 0.5804195804195804,
+      "bootstrap": {
+        "unit": "normalized_utterance_group",
+        "clusters": 600,
+        "samples": 1000,
+        "seed": 20261002,
+        "confidence": 0.95,
+        "micro_f1_ci95": [
+          0.36509790404824427,
+          0.46741168211756445
+        ],
+        "sentence_exact_ci95": [
+          0.4216666666666667,
+          0.49833333333333335
+        ]
+      }
+    },
+    "positive_only": {
+      "examples": 171,
+      "micro_f1": 0.672,
+      "sentence_exact_accuracy": 0.5614035087719298
+    }
+  },
+  "hybrid": {
+    "metrics": {
+      "examples": 600,
+      "metric_definition": {
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+        "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+        "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+      },
+      "gold_slot_count": 204,
+      "predicted_slot_count": 226,
+      "micro": {
+        "tp": 123,
+        "fp": 103,
+        "fn": 81,
+        "precision": 0.5442477876106194,
+        "recall": 0.6029411764705882,
+        "f1": 0.5720930232558139
+      },
+      "micro_f1": 0.5720930232558139,
+      "per_type": {
+        "date": {
+          "tp": 64,
+          "fp": 38,
+          "fn": 30,
+          "precision": 0.6274509803921569,
+          "recall": 0.6808510638297872,
+          "f1": 0.6530612244897959
+        },
+        "time": {
+          "tp": 12,
+          "fp": 14,
+          "fn": 9,
+          "precision": 0.46153846153846156,
+          "recall": 0.5714285714285714,
+          "f1": 0.5106382978723404
+        },
+        "place_name": {
+          "tp": 25,
+          "fp": 31,
+          "fn": 27,
+          "precision": 0.44642857142857145,
+          "recall": 0.4807692307692308,
+          "f1": 0.46296296296296297
+        },
+        "person": {
+          "tp": 22,
+          "fp": 20,
+          "fn": 15,
+          "precision": 0.5238095238095238,
+          "recall": 0.5945945945945946,
+          "f1": 0.5569620253164557
+        }
+      },
+      "macro_f1": 0.5459061276603887,
+      "sentence_exact_accuracy": 0.785,
+      "sentence_exact_count": 471,
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 1.0,
+      "copy_valid_rate": 1.0,
+      "invalid_output_count": 0,
+      "error_counts": {},
+      "no_slot_examples": 429,
+      "no_slot_false_positive_count": 50,
+      "no_slot_false_positive_rate": 0.11655011655011654,
+      "no_slot_invalid_output_count": 0,
+      "no_slot_failure_rate": 0.11655011655011654,
+      "bootstrap": {
+        "unit": "normalized_utterance_group",
+        "clusters": 600,
+        "samples": 1000,
+        "seed": 20261002,
+        "confidence": 0.95,
+        "micro_f1_ci95": [
+          0.5103424711334538,
+          0.6370208842400443
+        ],
+        "sentence_exact_ci95": [
+          0.7533333333333333,
+          0.8166666666666667
+        ]
+      }
+    },
+    "positive_only": {
+      "examples": 171,
+      "micro_f1": 0.6577540106951871,
+      "sentence_exact_accuracy": 0.5380116959064327
+    }
+  },
+  "hybrid_minus_bio_paired_f1": {
+    "unit": "normalized_utterance_group",
+    "clusters": 600,
+    "samples": 2000,
+    "seed": 20261002,
+    "baseline_micro_f1": 0.4975124378109453,
+    "candidate_micro_f1": 0.5720930232558139,
+    "candidate_minus_baseline": 0.07458058544486862,
+    "delta_ci95": [
+      0.020979322651857042,
+      0.13234535750936116
+    ],
+    "bootstrap_probability_delta_positive": 0.998,
+    "valid_bootstrap_draws": 2000,
+    "baseline_sentence_exact_accuracy": 0.775,
+    "candidate_sentence_exact_accuracy": 0.785,
+    "sentence_exact_candidate_minus_baseline": 0.010000000000000009,
+    "sentence_exact_delta_ci95": [
+      -0.013333333333333334,
+      0.03333333333333333
+    ]
+  },
+  "independent_success_gate": {
+    "checks": {
+      "strict_entity_f1_at_least_60pct": false,
+      "positive_subset_f1_at_least_60pct": true,
+      "no_slot_failure_at_most_20pct": true,
+      "json_valid_at_least_95pct": true,
+      "schema_valid_at_least_95pct": true,
+      "copy_valid_at_least_95pct": true,
+      "paired_f1_ci95_lower_positive": true
+    },
+    "passed": false
+  }
+}

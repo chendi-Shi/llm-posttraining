@@ -1,10 +1,12 @@
 # 后训练算法实习／校招：项目证据与面试说明
 
-更新日期：2026-09-29。本页面向后训练算法实习和校招申请，区分**完成确认评测的 v1**、**开发集门槛未通过的 v2 SFT／v3 DPO**及**事后同样本 SFT 探索性对照**。简历数字只取自对应的已完成评测，并标明开发集或确认集。使用下文表述前，应核对公开仓库的相应报告。
+更新日期：2026-09-30。本页面向后训练算法实习和校招申请，区分**完成确认评测的 v1**、**开发集门槛未通过的 v2–v4**、**事后同样本 SFT 探索性对照**及**v5 混合系统的独立测试**。简历数字只取自对应的已完成评测，并标明数据集角色和未通过的门槛。使用下文表述前，应核对公开仓库的相应报告。
 
 ## 30 秒介绍
 
 我在 16 GB 内存、无独立 GPU 的电脑上，对 Qwen2.5-0.5B-Instruct 做 4-bit QLoRA SFT/DPO，研究中文语音助理请求中 `date`、`time`、`place_name`、`person` 四类槽位的严格 JSON 抽取。使用许可明确的 MASSIVE 1.0 `zh-CN` 数据，按原句分组切分、冻结检查点选择，并与同训练数据的字符 BIO 模型比较。v1 确认集上，SFT 的实体 micro-F1 从基座 **2.55%** 提升到 **60.43%**，但 40 条无目标句全部失败。针对这个失败，v2 锁定自然频率留出和负例训练；v3 再用全新训练组的 256 对偏好样本做 DPO。v3 开发集无槽失败从 v2 的 **126/167** 降到 **28/167**，但阳性句 F1 从 **67.01%** 降到 **54.75%**，总体 F1 增量的配对区间跨 0。同 256 样本继续 SFT 对照的开发集总体 F1 **49.24%**、无槽失败 **78/167**，帮助解释新增数据与偏好优化的权衡。预设门槛未通过，400 条确认集继续封存，槽位模型不用于自动抽取。
+
+在进一步的 v4/v5 实验中，我发现把阳性偏好占比提高到 50% 会伤害无槽拒判，因此固定 BIO 默认、让高置信度 DPO 回复有限替换。在与所有旧样本组不重叠的 **600 条独立测试**上，组合严格实体 F1 **57.21%**，相对冻结 BIO 的 **49.75%** 提高 **7.46 个百分点**，配对 95% 区间 **+2.10 至 +13.23**；但未达到事先要求的绝对 F1 **60%**，所以仍不称为总体成功或上线模型。
 
 ## 与岗位相关的可核对证据
 
@@ -12,11 +14,12 @@
 | --- | --- | --- |
 | 数据设计与治理 | [v1 预注册方案](SLOT_RESEARCH.md)、[v2 冻结设计](reports/massive-slots-v2-design.md)记录数据来源、许可、分组去重、切分、哈希和确认集使用规则 | v1 按目标槽位富集，不能代表真实请求比例；v2 仍是 MASSIVE 同源数据 |
 | 参数高效后训练 | [训练脚本](scripts/train_sft.py)、[v1 运行清单](reports/massive-slots-training-provenance.json)记录 4-bit QLoRA、LoRA 配置、训练步数和环境 | 模型为 0.5B，单机 CPU；不等于 7B／多卡／分布式训练经验 |
-| 评测与模型选择 | [v1 选择锁](reports/massive-slots-selection-lock.json)、[确认集比较](reports/massive-slots-confirmation-comparison.json)记录固定检查点、严格实体 F1、逐句正确率、有效率和配对 bootstrap；[公开证据核验](scripts/audit_public_results.py)由 CI 检查跨报告数据指纹、指标算术和失败门禁 | 公开核验不能重算未发布的逐题预测或 bootstrap；确认集只对本轮模型选择留出，不能称为线上盲测 |
+| 评测与模型选择 | [v1 选择锁](reports/massive-slots-selection-lock.json)、[确认集比较](reports/massive-slots-confirmation-comparison.json)记录固定检查点、严格实体 F1、逐句正确率、有效率和配对 bootstrap | 确认集只对本轮模型选择留出；不能称为完全无污染或线上盲测 |
 | 强基线与失败归因 | [v1 研究报告](reports/massive-slots-study-summary.md)和 [v2 开发集报告](reports/massive-slots-v2-study-summary.md)公开同量 BIO 基线、无槽误报与失败门禁 | v1 BIO 的 F1 点估计较高，但与 SFT 的配对差值区间跨 0；v2 未进入确认集，不能声称最终改进 |
 | SFT/DPO 完整实验链 | [意图分类对照](reports/massive-test-comparison.json)和 [DPO 开发集比较](reports/massive-dpo-dev-comparison.json)保留 SFT 小幅收益与 DPO 负结果 | DPO 没有达到开发集门槛，未进入官方 test；没有奖励模型、PPO／GRPO 或 Agentic RL 实验 |
 | 偏好优化与权衡分析 | [v3 冻结方案](reports/massive-slots-v3-design.md)、[偏好样本审计](reports/massive-slots-v3-preference-audit.json)与[开发集报告](reports/massive-slots-v3-study-summary.md)记录训练数据隔离、冻结参考、无槽错误下降和阳性召回损失 | v3 未通过总体 F1 与阳性 F1 门槛；新增训练组与保存精度差异限制因果解释，未进入确认集 |
 | 同样本消融与归因 | [继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)用同一批 256 个新增正确答案、同一起始 adapter 比较 v2 SFT 和 DPO | 对照是在已看过开发集后设计，属于探索性；相同 optimizer steps 不等于相同计算量或唯一损失函数差异 |
+| 概率门控与独立验证 | [v5 方案](reports/massive-slots-v5-design.md)、[选择锁](reports/massive-slots-v5-selection-lock.json)、[600 条测试](reports/massive-slots-v5-study-summary.md)记录开发集选规则、测试前锁定和配对区间 | 收益属于 BIO＋DPO 混合系统；预设 F1 ≥60% 门槛失败，不能宣称 DPO 单模型或线上收益 |
 | 工程交付 | [人工复核服务说明](SERVICE_RUNBOOK.md)、[容器部署说明](CLOUD_DEPLOY.md)和 [上线验收](RELEASE_READINESS.md)说明本地服务与部署包 | 服务使用**另一个意图分类小模型**，不是槽位 SFT；尚无云服务器、对外服务或线上反馈 |
 
 ## 已完成的结果与失败分析
@@ -39,6 +42,12 @@ v2 同时改变训练集大小、抽取样本和负例比例，不能单独归�
 
 面试时可把 v3 作为**训练目标权衡和失败门禁**案例：偏好优化让模型更愿意输出空槽位，但同时漏掉更多真实实体。新增的[同样本继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)使用相同 256 个新增正确答案，从同一起始 adapter 训练：开发集总体 F1 **49.24%**、阳性句 F1 **67.36%**、无槽失败 **78/167**。DPO 相对它的无槽失败再下降 **29.94 个百分点**（配对区间 **+23.35 至 +37.13**），但总体 F1 差值为 **−2.13 个百分点**（区间 **−8.05 至 +3.46**），阳性句 F1 降至 **54.75%**。这说明新增数据本身已带来改善，DPO 的进一步拒判伴随阳性抽取损失；对照是事后设计的探索性开发集结果，不能单独证明损失函数因果作用，也不是确认集或线上收益。
 
+## v4/v5：新切分上的失败与独立相对收益
+
+v4 在全新训练组上将偏好对阳性占比由 25% 提到 50%，完成 64 步 DPO；新开发集阳性 F1 升到 **66.29%**，但无槽失败为 **98/171**，总体 F1 只有 **44.79%**，未通过预设门槛。[失败报告](reports/massive-slots-v4-study-summary.md)保留了没有打开 v4 400 条确认集的决定。
+
+在已看过的开发集上固定一个 BIO 加 DPO 概率门控规则，随后用另一批与所有旧实验不重叠的 600 条组做[单次独立测试](reports/massive-slots-v5-study-summary.md)。混合系统 F1 **57.21%**，BIO **49.75%**，差值 **+7.46 个百分点**，配对区间 **+2.10 至 +13.23**；阳性 F1 **65.78%**、无槽失败 **50/429**、JSON／结构／复制合法率各 **100%**。绝对 F1 未达预设 **60%**，所以总体门槛失败。这项证据可展示“开发集选规则—测试前锁定—独立检验—如实报告”的闭环，不能描述为 DPO 单模型胜过 BIO。
+
 ## 简历可用表述
 
 以下表述只描述已经完成的实验；应按本人实际参与范围调整，并在公开仓库同步相应证据后使用。
@@ -50,8 +59,10 @@ v2 同时改变训练集大小、抽取样本和负例比例，不能单独归�
 > 在新的 256 个 train 来源原句组上构造偏好对，从冻结 SFT 出发完成 64 步 CPU QLoRA DPO；开发集无槽失败由 126/167 降至 28/167（配对 95% 区间下降 50.90–65.87 个百分点），但阳性句 F1 下降且总体 F1 增量区间跨 0，按预设门槛停止并保留 400 条确认集。
 >
 > 针对新增训练组可能混淆 DPO 效果的问题，补做同 256 个正确答案、同一起始 adapter 的继续 SFT 开发集对照：总体实体 F1 49.24%、无槽失败 78/167；DPO 进一步降至 28/167，但阳性句 F1 从 67.36% 降至 54.75%，作为探索性权衡分析而非确认成绩。
+>
+> 在开发集上冻结 BIO＋DPO 置信度门控规则并锁定模型、阈值与新测试集；600 条独立测试的严格实体 F1 从 BIO 的 49.75% 提至混合系统的 57.21%（配对 95% 区间 +2.10 至 +13.23 个百分点），但未达预设的绝对 F1 60% 门槛，保留负面判定。
 
-面试时建议先展示 [一页案例](PORTFOLIO_CASE_STUDY.md)，再按追问打开[训练代码](scripts/train_dpo.py)、[v1 模型选择锁](reports/massive-slots-selection-lock.json)、[v2 停止报告](reports/massive-slots-v2-study-summary.md)、[v3 DPO 结果](reports/massive-slots-v3-study-summary.md)与[同样本对照](reports/massive-slots-v3-matched-control-summary.md)。被问到“为何没有直接上线”时，可用 **v1 的 40/40 无槽失败、v2 的 126/167 无槽失败、v3 的阳性召回损失及缺少真实请求验证** 解释。v2/v3 展示的是能执行失败门禁并保留确认集，而不是性能成功。
+面试时建议先展示 [一页案例](PORTFOLIO_CASE_STUDY.md)，再按追问打开[训练代码](scripts/train_dpo.py)、[v1 模型选择锁](reports/massive-slots-selection-lock.json)、[v3 DPO 结果](reports/massive-slots-v3-study-summary.md)、[同样本对照](reports/massive-slots-v3-matched-control-summary.md)与[v5 独立测试](reports/massive-slots-v5-study-summary.md)。被问到“为何没有直接上线”时，可用 **v1 的 40/40 无槽失败、v2 的 126/167 无槽失败、v3/v4 的拒判和召回权衡、v5 未达 60% 门槛以及缺少真实请求验证** 解释。
 
 ## 投递定位
 
