@@ -26,7 +26,7 @@ v3 相比 v2 加入了 256 个新训练组，因此两者的差异不能只归�
 
 1. **切分与门禁**：[v2 冻结方案](reports/massive-slots-v2-design.md)、[选择器](scripts/select_massive_slots_v2.py)和[停止报告](reports/massive-slots-v2-study-summary.md)。说明如何防止看过确认集再调模型。
 2. **训练与复现**：[SFT 代码](scripts/train_sft.py)、[DPO 代码](scripts/train_dpo.py)、[v3 复现步骤](SLOT_V3_RUNBOOK.md)和模型／数据 SHA-256。说明在 CPU 上如何做参数高效训练、冻结 DPO reference 并核查模板。
-3. **指标与坏例**：[严格解析与评分](scripts/evaluate_massive_slots.py)、[配对比较](scripts/compare_massive_slots_v2.py)及[v3 结果](reports/massive-slots-v3-study-summary.md)。说明为什么同时看总体 F1、阳性 F1、无槽失败和合法率。
+3. **指标与坏例**：[严格解析与评分](scripts/evaluate_massive_slots.py)、[配对比较](scripts/compare_massive_slots_v2.py)、[公开证据核验](scripts/audit_public_results.py)及[v3 结果](reports/massive-slots-v3-study-summary.md)。说明为什么同时看总体 F1、阳性 F1、无槽失败和合法率，并现场核对报告是否自洽。
 
 ## 简历表述边界
 

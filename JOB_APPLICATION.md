@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | 数据设计与治理 | [v1 预注册方案](SLOT_RESEARCH.md)、[v2 冻结设计](reports/massive-slots-v2-design.md)记录数据来源、许可、分组去重、切分、哈希和确认集使用规则 | v1 按目标槽位富集，不能代表真实请求比例；v2 仍是 MASSIVE 同源数据 |
 | 参数高效后训练 | [训练脚本](scripts/train_sft.py)、[v1 运行清单](reports/massive-slots-training-provenance.json)记录 4-bit QLoRA、LoRA 配置、训练步数和环境 | 模型为 0.5B，单机 CPU；不等于 7B／多卡／分布式训练经验 |
-| 评测与模型选择 | [v1 选择锁](reports/massive-slots-selection-lock.json)、[确认集比较](reports/massive-slots-confirmation-comparison.json)记录固定检查点、严格实体 F1、逐句正确率、有效率和配对 bootstrap | 确认集只对本轮模型选择留出；不能称为完全无污染或线上盲测 |
+| 评测与模型选择 | [v1 选择锁](reports/massive-slots-selection-lock.json)、[确认集比较](reports/massive-slots-confirmation-comparison.json)记录固定检查点、严格实体 F1、逐句正确率、有效率和配对 bootstrap；[公开证据核验](scripts/audit_public_results.py)由 CI 检查跨报告数据指纹、指标算术和失败门禁 | 公开核验不能重算未发布的逐题预测或 bootstrap；确认集只对本轮模型选择留出，不能称为线上盲测 |
 | 强基线与失败归因 | [v1 研究报告](reports/massive-slots-study-summary.md)和 [v2 开发集报告](reports/massive-slots-v2-study-summary.md)公开同量 BIO 基线、无槽误报与失败门禁 | v1 BIO 的 F1 点估计较高，但与 SFT 的配对差值区间跨 0；v2 未进入确认集，不能声称最终改进 |
 | SFT/DPO 完整实验链 | [意图分类对照](reports/massive-test-comparison.json)和 [DPO 开发集比较](reports/massive-dpo-dev-comparison.json)保留 SFT 小幅收益与 DPO 负结果 | DPO 没有达到开发集门槛，未进入官方 test；没有奖励模型、PPO／GRPO 或 Agentic RL 实验 |
 | 偏好优化与权衡分析 | [v3 冻结方案](reports/massive-slots-v3-design.md)、[偏好样本审计](reports/massive-slots-v3-preference-audit.json)与[开发集报告](reports/massive-slots-v3-study-summary.md)记录训练数据隔离、冻结参考、无槽错误下降和阳性召回损失 | v3 未通过总体 F1 与阳性 F1 门槛；新增训练组与保存精度差异限制因果解释，未进入确认集 |

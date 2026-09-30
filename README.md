@@ -22,6 +22,10 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 
 在已看过 v3 DPO 开发集后，我从同一 256 对偏好数据提取正确回答，按[事先记录的对照方案](reports/massive-slots-v3-matched-control-design.md)从同一 v2 adapter 继续 SFT 64 步。固定开发集上，继续 SFT 总体实体 F1 **49.24%**、阳性句 F1 **67.36%**、无槽失败 **78/167**。DPO 相对该对照将无槽失败进一步降至 **28/167**，但阳性句 F1 降至 **54.75%**，总体 F1 差值的配对 95% 区间为 **−8.05 至 +3.46 个百分点**。这只能解释当前开发集的权衡，不能把差异唯一归因为 DPO 损失，也不改变 v3 未过门槛及 400 条确认集封存的决定。[完整报告](reports/massive-slots-v3-matched-control-summary.md)
 
+## 公开证据核验
+
+从 GitHub 克隆仓库后，可直接运行 `python scripts/audit_public_results.py`。它用公开 JSON 核对 v1 选择锁与确认集、v2/v3 的数据和推理协议、实体与无槽指标算术、配对差值以及 v3 的失败门禁；GitHub CI 每次提交都会运行。它不需要下载数据或模型，也不重算逐题预测和 bootstrap，因此**验证的是公开记录内部一致性**。[与类似项目的对标及改进理由](reports/github-peer-review-2026-09.md)
+
 ## 旧意图分类任务与人工复核服务
 
 | 模型 | 训练集 | 官方 test 准确率 | 官方 test macro-F1 | 当前用途 |
