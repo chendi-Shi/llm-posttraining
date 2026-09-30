@@ -1,0 +1,297 @@
+{
+  "study": "MASSIVE zh-CN four-slot v4 balanced-preference DPO development",
+  "role": "dev",
+  "v4_manifest_sha256": "c3bc00cadb70fc6c7a7487e19a2e23f6e57726b4b97cbfaa3582c9835395c206",
+  "dev_file_sha256": "8d1e5caf29eb10b5be7d95e8470dbc6c1257085c83769b0cea847643330ee3d0",
+  "preference_file_sha256": "43fe0918585fa01e2b84427eff37d03966ecfd481b94dc458b6f8e16d57b037a",
+  "v4_training_run_manifest_sha256": "fca68dc92c09fb38487f0e9ee1da799dbdd7a6c79ffe9481f6e07f0a985c5ad7",
+  "inference_files_sha256": {
+    "v3_dpo": {
+      "base/config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+      "base/configuration.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "base/generation_config.json": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+      "base/LICENSE": "ff363795c651ab381e0e74c09c9afb5af5b4c78f84ec43421693ec371769b264",
+      "base/merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+      "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "base/tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+      "base/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "adapter/adapter_config.json": "3a3ecc8a7ff352e9569231f5111c3b06803a0626f1902c6169c2254c77a156fb",
+      "adapter_model.safetensors": "634c83b63b840708e5d8ad63e710fe3a2f219924b3d4cad00ee6f6eb9d721c8a",
+      "adapter/chat_template.jinja": "8aa40ce145adb73cb3a75194dc0224702a95850ec5275cabb728496bbd749fc6",
+      "adapter/README.md": "602721397b329b2d10d2299ec02c5c36f2207f1b1bd083ece7fb2174a70aae4b",
+      "adapter/run_manifest.json": "835ebdaec5ab042848a2671f56e9363ce3c4dc49323235de703b6f03712320c8",
+      "adapter/tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+      "adapter/tokenizer_config.json": "1f18fb516a5b9ec1286b09ef8df6cbe736ad8298c77d99953d85f182572b273e",
+      "adapter/trainer_log_history.json": "85e749e5ee55c77391b57ba642f6b19bd3f511d7e6b5e9d3d61c7bb995bd46f2",
+      "adapter/training_args.bin": "2246272cbc7e0aebd244994f9b68ff5f3341376533db6e493366a7db9b89586b"
+    },
+    "v4_balanced_dpo": {
+      "base/config.json": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+      "base/configuration.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "base/generation_config.json": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+      "base/LICENSE": "ff363795c651ab381e0e74c09c9afb5af5b4c78f84ec43421693ec371769b264",
+      "base/merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+      "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "base/tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+      "base/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "adapter/adapter_config.json": "8d4471a0f349ec79bc65b3c4808e1e203bf3b923bf20339e75ae230ff1e6607a",
+      "adapter_model.safetensors": "ed76990eef5bf7b89e2ce01ba516bbb5455de4c91e1242dc74c164d6603f8a6f",
+      "adapter/chat_template.jinja": "8aa40ce145adb73cb3a75194dc0224702a95850ec5275cabb728496bbd749fc6",
+      "adapter/README.md": "ea29a7a76b349bf6e1457dfae59280460295074fdfa058a916c92a3b1acec065",
+      "adapter/run_manifest.json": "fca68dc92c09fb38487f0e9ee1da799dbdd7a6c79ffe9481f6e07f0a985c5ad7",
+      "adapter/tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+      "adapter/tokenizer_config.json": "1f18fb516a5b9ec1286b09ef8df6cbe736ad8298c77d99953d85f182572b273e",
+      "adapter/trainer_log_history.json": "26999a42ecaec4d88238b68e19365633c977d2a9a5e65cf7de5bf060e1e487c9",
+      "adapter/training_args.bin": "5a0e17b0da59aa3817a37df314bf0d5b907ddbd1d26a82aeee553e6b277f4456"
+    }
+  },
+  "prediction_file_sha256": {
+    "v3_dpo": "03a89e31018bbf2595f65c59361b6d8f355c94073c9da5e2bd2316872c7aac39",
+    "v4_balanced_dpo": "460ed86a06f8445e5275fa1fa03a78eff162f375ee04a2389c6d40fa397c9a79"
+  },
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "v3": {
+      "max_observed_input_tokens": 101
+    },
+    "v4": {
+      "max_observed_input_tokens": 101
+    }
+  },
+  "elapsed_seconds": 3190.81,
+  "v3_dpo": {
+    "metrics": {
+      "examples": 250,
+      "metric_definition": {
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+        "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+        "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+      },
+      "gold_slot_count": 93,
+      "predicted_slot_count": 93,
+      "micro": {
+        "tp": 49,
+        "fp": 44,
+        "fn": 44,
+        "precision": 0.5268817204301075,
+        "recall": 0.5268817204301075,
+        "f1": 0.5268817204301075
+      },
+      "micro_f1": 0.5268817204301075,
+      "per_type": {
+        "date": {
+          "tp": 26,
+          "fp": 25,
+          "fn": 15,
+          "precision": 0.5098039215686274,
+          "recall": 0.6341463414634146,
+          "f1": 0.5652173913043478
+        },
+        "time": {
+          "tp": 2,
+          "fp": 3,
+          "fn": 14,
+          "precision": 0.4,
+          "recall": 0.125,
+          "f1": 0.19047619047619047
+        },
+        "place_name": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 7,
+          "precision": 0.55,
+          "recall": 0.6111111111111112,
+          "f1": 0.5789473684210527
+        },
+        "person": {
+          "tp": 10,
+          "fp": 7,
+          "fn": 8,
+          "precision": 0.5882352941176471,
+          "recall": 0.5555555555555556,
+          "f1": 0.5714285714285714
+        }
+      },
+      "macro_f1": 0.4765173804075406,
+      "sentence_exact_accuracy": 0.72,
+      "sentence_exact_count": 180,
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 0.988,
+      "copy_valid_rate": 0.972,
+      "invalid_output_count": 7,
+      "error_counts": {
+        "invalid_slot_type_or_value": 3,
+        "value_not_copied_from_utterance": 4
+      },
+      "no_slot_examples": 171,
+      "no_slot_false_positive_count": 23,
+      "no_slot_false_positive_rate": 0.13450292397660818,
+      "no_slot_invalid_output_count": 3,
+      "no_slot_failure_rate": 0.15204678362573099,
+      "bootstrap": {
+        "unit": "normalized_utterance_group",
+        "clusters": 250,
+        "samples": 1000,
+        "seed": 20261001,
+        "confidence": 0.95,
+        "micro_f1_ci95": [
+          0.4408143194335169,
+          0.6145833333333334
+        ],
+        "sentence_exact_ci95": [
+          0.668,
+          0.776
+        ]
+      }
+    },
+    "positive_only": {
+      "examples": 79,
+      "micro_f1": 0.6049382716049383,
+      "sentence_exact_accuracy": 0.4430379746835443
+    }
+  },
+  "v4_balanced_dpo": {
+    "metrics": {
+      "examples": 250,
+      "metric_definition": {
+        "entity_match": "multiset of (type, literal value) per utterance",
+        "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+        "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+        "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+      },
+      "gold_slot_count": 93,
+      "predicted_slot_count": 166,
+      "micro": {
+        "tp": 58,
+        "fp": 108,
+        "fn": 35,
+        "precision": 0.3493975903614458,
+        "recall": 0.6236559139784946,
+        "f1": 0.44787644787644787
+      },
+      "micro_f1": 0.44787644787644787,
+      "per_type": {
+        "date": {
+          "tp": 30,
+          "fp": 50,
+          "fn": 11,
+          "precision": 0.375,
+          "recall": 0.7317073170731707,
+          "f1": 0.49586776859504134
+        },
+        "time": {
+          "tp": 3,
+          "fp": 5,
+          "fn": 13,
+          "precision": 0.375,
+          "recall": 0.1875,
+          "f1": 0.25
+        },
+        "place_name": {
+          "tp": 13,
+          "fp": 32,
+          "fn": 5,
+          "precision": 0.28888888888888886,
+          "recall": 0.7222222222222222,
+          "f1": 0.4126984126984127
+        },
+        "person": {
+          "tp": 12,
+          "fp": 21,
+          "fn": 6,
+          "precision": 0.36363636363636365,
+          "recall": 0.6666666666666666,
+          "f1": 0.47058823529411764
+        }
+      },
+      "macro_f1": 0.40728860414689294,
+      "sentence_exact_accuracy": 0.468,
+      "sentence_exact_count": 117,
+      "json_valid_rate": 1.0,
+      "schema_valid_rate": 0.968,
+      "copy_valid_rate": 0.92,
+      "invalid_output_count": 20,
+      "error_counts": {
+        "invalid_slot_type_or_value": 8,
+        "value_not_copied_from_utterance": 12
+      },
+      "no_slot_examples": 171,
+      "no_slot_false_positive_count": 83,
+      "no_slot_false_positive_rate": 0.4853801169590643,
+      "no_slot_invalid_output_count": 15,
+      "no_slot_failure_rate": 0.5730994152046783,
+      "bootstrap": {
+        "unit": "normalized_utterance_group",
+        "clusters": 250,
+        "samples": 1000,
+        "seed": 20261001,
+        "confidence": 0.95,
+        "micro_f1_ci95": [
+          0.37062289562289563,
+          0.5220670544337138
+        ],
+        "sentence_exact_ci95": [
+          0.408,
+          0.524
+        ]
+      }
+    },
+    "positive_only": {
+      "examples": 79,
+      "micro_f1": 0.6628571428571428,
+      "sentence_exact_accuracy": 0.5569620253164557
+    }
+  },
+  "v4_minus_v3_paired_f1": {
+    "unit": "normalized_utterance_group",
+    "clusters": 250,
+    "samples": 1000,
+    "seed": 20261001,
+    "baseline_micro_f1": 0.5268817204301075,
+    "candidate_micro_f1": 0.44787644787644787,
+    "candidate_minus_baseline": -0.07900527255365963,
+    "delta_ci95": [
+      -0.14180301203879686,
+      -0.024210620217618578
+    ],
+    "bootstrap_probability_delta_positive": 0.004,
+    "valid_bootstrap_draws": 1000,
+    "baseline_sentence_exact_accuracy": 0.72,
+    "candidate_sentence_exact_accuracy": 0.468,
+    "sentence_exact_candidate_minus_baseline": -0.25199999999999995,
+    "sentence_exact_delta_ci95": [
+      -0.316,
+      -0.184
+    ]
+  },
+  "v3_minus_v4_no_slot_failure": {
+    "definition": "reference no-slot failure rate minus candidate rate; positive favors candidate",
+    "no_slot_examples": 171,
+    "groups": 171,
+    "samples": 1000,
+    "seed": 20261001,
+    "observed_reduction": -0.42105263157894735,
+    "reduction_ci95": [
+      -0.49122807017543857,
+      -0.34502923976608185
+    ]
+  },
+  "development_gate": {
+    "checks": {
+      "strict_entity_f1_at_least_55pct": false,
+      "positive_subset_f1_at_least_60pct": true,
+      "no_slot_failure_at_most_30pct": false,
+      "json_valid_at_least_95pct": true,
+      "schema_valid_at_least_95pct": true,
+      "copy_valid_at_least_95pct": false,
+      "paired_f1_ci95_lower_positive": false
+    },
+    "passed": false
+  }
+}
