@@ -1,0 +1,106 @@
+{
+  "task": "MASSIVE 1.0 zh-CN four-slot v6 matched BIO control",
+  "role": "dev",
+  "model": "character BIO contextual features + LinearSVC + constrained BIO decoding",
+  "training_configuration": {
+    "estimator": "LinearSVC",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "max_iter": 5000
+  },
+  "training_seed": 20260928,
+  "bootstrap_seed": 20261003,
+  "data_license": "CC-BY-4.0",
+  "source_sha256": "7df623fd2d300a4d235d6ee5bd396c9a28258d3a0ccb29abdb054506eba153f8",
+  "manifest_sha256": "7982b3760333a364ebf17c91556f9978b32811fdacc0321db3129b6abee41a70",
+  "train_file_sha256": "ea1cd537dcfd924b24eec7997b692a42ae9df757c52f89c904358665ec06a3d3",
+  "dev_file_sha256": "6ee1812c5ac9a12e44047cd57e5973be606b9dcdf546d1d30ccf96f4ff1a157c",
+  "train_examples": 1600,
+  "dev_examples": 300,
+  "train_seconds": 2.43,
+  "test_used": false,
+  "model_sha256": "732df4573445e4934ad038cd41dbfe4824c89494f22f5fefeee06ccb321f7b3a",
+  "prediction_file_sha256": "c05cda5dbe38353b835285b0be39fda4348f609c4e6193107967a3d9616eb0b3",
+  "metrics": {
+    "examples": 300,
+    "metric_definition": {
+      "entity_match": "multiset of (type, literal value) per utterance",
+      "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+      "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+      "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+    },
+    "gold_slot_count": 106,
+    "predicted_slot_count": 110,
+    "micro": {
+      "tp": 71,
+      "fp": 39,
+      "fn": 35,
+      "precision": 0.6454545454545455,
+      "recall": 0.6698113207547169,
+      "f1": 0.6574074074074074
+    },
+    "micro_f1": 0.6574074074074074,
+    "per_type": {
+      "date": {
+        "tp": 39,
+        "fp": 17,
+        "fn": 11,
+        "precision": 0.6964285714285714,
+        "recall": 0.78,
+        "f1": 0.7358490566037735
+      },
+      "time": {
+        "tp": 13,
+        "fp": 12,
+        "fn": 3,
+        "precision": 0.52,
+        "recall": 0.8125,
+        "f1": 0.6341463414634146
+      },
+      "place_name": {
+        "tp": 11,
+        "fp": 4,
+        "fn": 12,
+        "precision": 0.7333333333333333,
+        "recall": 0.4782608695652174,
+        "f1": 0.5789473684210527
+      },
+      "person": {
+        "tp": 8,
+        "fp": 6,
+        "fn": 9,
+        "precision": 0.5714285714285714,
+        "recall": 0.47058823529411764,
+        "f1": 0.5161290322580645
+      }
+    },
+    "macro_f1": 0.6162679496865764,
+    "sentence_exact_accuracy": 0.8433333333333334,
+    "sentence_exact_count": 253,
+    "json_valid_rate": 1.0,
+    "schema_valid_rate": 1.0,
+    "copy_valid_rate": 1.0,
+    "invalid_output_count": 0,
+    "error_counts": {},
+    "no_slot_examples": 208,
+    "no_slot_false_positive_count": 11,
+    "no_slot_false_positive_rate": 0.052884615384615384,
+    "no_slot_invalid_output_count": 0,
+    "no_slot_failure_rate": 0.052884615384615384,
+    "bootstrap": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "confidence": 0.95,
+      "micro_f1_ci95": [
+        0.5675644248900062,
+        0.7476077749810219
+      ],
+      "sentence_exact_ci95": [
+        0.7966666666666666,
+        0.8833333333333333
+      ]
+    }
+  }
+}

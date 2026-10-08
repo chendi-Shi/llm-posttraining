@@ -1,0 +1,111 @@
+{
+  "study": "local review-only HTTP endpoint load characterisation",
+  "route": "/v1/intents",
+  "label": "linear-intent",
+  "base_url": "http://127.0.0.1:8791",
+  "request_text_chars": 6,
+  "model_version": "linear-fa9f1cb3c724",
+  "warmup": {
+    "samples": 5,
+    "min_ms": 6.24,
+    "p50_ms": 6.66,
+    "p95_ms": 23.35,
+    "p99_ms": 26.66,
+    "max_ms": 27.49,
+    "mean_ms": 10.72
+  },
+  "sweeps": [
+    {
+      "concurrency": 1,
+      "requests_attempted": 40,
+      "http_status_counts": {
+        "200": 40
+      },
+      "successful_samples": 40,
+      "wall_seconds": 0.319,
+      "successful_throughput_requests_per_second": 125.5119,
+      "client_latency": {
+        "samples": 40,
+        "min_ms": 5.41,
+        "p50_ms": 6.11,
+        "p95_ms": 18.58,
+        "p99_ms": 25.11,
+        "max_ms": 28.17,
+        "mean_ms": 7.9
+      },
+      "server_reported_elapsed_ms": {
+        "samples": 40,
+        "min_ms": 1.8,
+        "p50_ms": 2.04,
+        "p95_ms": 2.3,
+        "p99_ms": 7.57,
+        "max_ms": 10.92,
+        "mean_ms": 2.27
+      }
+    },
+    {
+      "concurrency": 2,
+      "requests_attempted": 80,
+      "http_status_counts": {
+        "200": 79,
+        "429": 1
+      },
+      "successful_samples": 79,
+      "wall_seconds": 0.501,
+      "successful_throughput_requests_per_second": 157.5766,
+      "client_latency": {
+        "samples": 79,
+        "min_ms": 6.28,
+        "p50_ms": 8.64,
+        "p95_ms": 28.19,
+        "p99_ms": 30.53,
+        "max_ms": 31.78,
+        "mean_ms": 12.5
+      },
+      "server_reported_elapsed_ms": {
+        "samples": 79,
+        "min_ms": 1.66,
+        "p50_ms": 2.29,
+        "p95_ms": 2.94,
+        "p99_ms": 3.16,
+        "max_ms": 3.22,
+        "mean_ms": 2.29
+      }
+    },
+    {
+      "concurrency": 4,
+      "requests_attempted": 160,
+      "http_status_counts": {
+        "200": 158,
+        "429": 2
+      },
+      "successful_samples": 158,
+      "wall_seconds": 1.569,
+      "successful_throughput_requests_per_second": 100.684,
+      "client_latency": {
+        "samples": 158,
+        "min_ms": 8.74,
+        "p50_ms": 35.76,
+        "p95_ms": 79.45,
+        "p99_ms": 125.99,
+        "max_ms": 140.34,
+        "mean_ms": 38.2
+      },
+      "server_reported_elapsed_ms": {
+        "samples": 158,
+        "min_ms": 1.87,
+        "p50_ms": 2.64,
+        "p95_ms": 3.31,
+        "p99_ms": 6.88,
+        "max_ms": 29.71,
+        "mean_ms": 2.9
+      }
+    }
+  ],
+  "notes": [
+    "Only HTTP 200 responses contribute latency samples; 429/503/504 are counted separately so queueing rejection cannot look like fast service.",
+    "The single-inference-slot design rejects concurrent work with 429 instead of queueing it, so concurrency 1 measures throughput and higher concurrency measures load shedding.",
+    "client_latency includes HTTP overhead; server_reported_elapsed_ms is the elapsed_ms field the service reports for the same requests.",
+    "Single-machine local loopback measurement; not a network or capacity result."
+  ]
+}
