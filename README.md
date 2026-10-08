@@ -1,6 +1,10 @@
 # 本地大模型后训练：中文结构化抽取与意图分类
 
-本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，构造许可清楚的数据、冻结模型选择、严格评测，并保留负结果。已完成的主研究是 MASSIVE 1.0 中文四槽 JSON 抽取 v1：384 条训练、100 条开发、200 条确认，另有同量数据的字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出实际命令、模型哈希、局限与结果。针对 v1 无槽误报，v2 SFT 与 v3 DPO 都按预先公开的方案在自然频率开发集上做纠错实验。v3 DPO 将无槽失败从 126/167 降至 28/167，但总体严格实体 F1 仅 47.12%，未达到预设门槛；新的 400 条确认集继续封存。[同样本继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)展示新增数据与偏好目标的探索性比较。[项目展示页](PORTFOLIO_CASE_STUDY.md)和[岗位证据](JOB_APPLICATION.md)说明可写进简历的结果与边界。仓库不含原始数据、权重或逐题预测。
+本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，并以字符 BIO 为同任务对照。数据来自许可清楚的 MASSIVE 中文子集；每轮固定训练、开发、测试的原句组和模型选择规则，公开聚合评测与失败案例分析。仓库不含原始数据、权重或逐题预测。
+
+**当前最重要的结果（v6，600 条新测试组）：**扩大 BIO 监督数据后的混合系统严格实体 F1 为 **62.59%**，相对旧混合系统的点估计高 **1.82 个百分点**，但配对 95% 区间为 **−3.58 至 +7.19**。因此预设的绝对 F1 门槛通过，**主要相对收益门槛未通过**；不能宣称可靠超越旧系统。[完整结论](reports/massive-slots-v6-study-summary.md)、[机器可读报告](reports/massive-slots-v6-test.json)和[复现说明](SLOT_V6_RUNBOOK.md)列出选择锁、文件指纹及限制。设计中的 1,600 组 QLoRA SFT 是独立的次级研究，只在开发集评估，不进入这组测试结论。
+
+项目从 v1 四槽抽取起步：384 条训练、100 条开发、200 条确认，另有同量字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出当时的结果。针对 v1 无槽误报，v2 SFT 与 v3 DPO 继续做纠错实验；v3 DPO 将无槽失败从 126/167 降至 28/167，但总体严格实体 F1 仅 47.12%，未达到预设门槛，两个旧确认集仍封存。[同样本继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)展示新增数据与偏好目标的探索性比较。[项目展示页](PORTFOLIO_CASE_STUDY.md)和[岗位证据](JOB_APPLICATION.md)说明可写进简历的结果与边界。
 
 | 四槽抽取，确认集 200 条 | 严格实体 micro-F1 | 逐句全对 | 无槽失败（共 40 条） |
 | --- | ---: | ---: | ---: |
@@ -30,6 +34,14 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 
 在已看过的 v4 开发集上固定一个概率门控：BIO 为默认回答，仅在 v4 DPO 给出合法、可复制且高置信度的非空槽位时替换。规则、阈值 `−0.08`、新测试集和成功门槛均在推理前通过[方案](reports/massive-slots-v5-design.md)与[选择锁](reports/massive-slots-v5-selection-lock.json)公开。**600 条全新自然频率测试组**上，严格实体 F1 为 BIO **49.75%**、v4 DPO 单模型 **41.65%**、固定混合系统 **57.21%**；混合相对 BIO 提高 **7.46 个百分点**，配对 95% 区间 **+2.10 至 +13.23**。混合的阳性子集 F1 为 **65.78%**，无槽失败 **50/429（11.66%）**，JSON／结构／原文复制合法率均为 100%。**预设绝对 F1 ≥60% 未达，因此总体门槛失败**；它是混合系统的独立相对收益，不能称为 DPO 单模型成功或可自动上线。[完整报告](reports/massive-slots-v5-study-summary.md)和[复现步骤](SLOT_V5_RUNBOOK.md)保留完整边界。
 
+## v6：扩大 BIO 训练集，绝对门槛达标但相对门槛未过
+
+在[预先固定](reports/massive-slots-v6-design.md)的 1,600 条新训练组上重训字符 BIO，并沿用**冻结 v4 DPO 与同一阈值 `−0.08`**。600 条全新自然频率测试组上，严格实体 micro-F1 为旧 BIO **55.70%**、新 BIO **61.39%**、v4 DPO **42.62%**、旧 v5 混合 **60.77%**、新混合 **62.59%**。新混合的阳性子集 F1 **71.12%**、无槽失败 **45/433（10.39%）**、JSON／结构／原文复制合法率各 **100%**，逐句全对 **81.8%**。
+
+**这是本项目四槽抽取首次达到预设绝对 F1 ≥60% 门槛；但 [v6 预设独立成功条件](SLOT_V6_RUNBOOK.md)还要求新混合相对旧 v5 混合的配对 95% 区间下界大于 0，实测差值为 +1.82 个百分点、区间 −3.58 至 +7.19，因此七项检查中六项通过、总体未通过。** 不能说 v6 复现并超过 v5，也不能称为 DPO 单模型提升或可自动上线。[完整结论](reports/massive-slots-v6-study-summary.md)与[复现步骤](SLOT_V6_RUNBOOK.md)保留边界。
+
+设计中的同 1,600 组 Qwen QLoRA SFT 次级实验另行进行，**固定配方与开发集评测[协议](reports/massive-slots-v6-sft-protocol.md)已单独固定**：它不进入主系统选型、不参与主验收，也不为它解封测试集，因此它的数字不能与上面的 62.59% 混在一起报告。
+
 ## 旧意图分类任务与人工复核服务
 
 | 模型 | 训练集 | 官方 test 准确率 | 官方 test macro-F1 | 当前用途 |
@@ -41,6 +53,8 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 线性模型在排除与完整 train/dev 相同文本的 2,727 条 test 上，准确率为 **82.80%**、macro-F1 为 **77.99%**。同一官方 test 此前已用于 SFT 研究，因此这个结果是锁定模型的确认，不能称为全新盲测。模型仍缺真实请求、未知意图、逐类充分样本及拒判校准，不能自动执行用户指令。详细证据见[线性基线测试摘要](reports/massive-linear-test-summary.md)和[发布与上线验收](RELEASE_READINESS.md)。
 
 从官方 MASSIVE 1.0 归档重建线性模型后，可按[服务运行说明](SERVICE_RUNBOOK.md)启动本地接口；原创代码和文档采用 [Apache 2.0](LICENSE)，[数据与模型许可](DATA_AND_MODEL_LICENSES.md)说明第三方来源和署名。[云服务器部署说明](CLOUD_DEPLOY.md)记录容器构建和访问边界。当前尚无云服务器和对外服务地址。
+
+四槽抽取系统另有 `--backend slots` 的本机端点 `POST /v1/slots`（v6 BIO＋冻结 DPO，阈值 `−0.08`，与已公布评测口径一致），同样只返回人工复核候选。[服务侧证据](SERVING_EVIDENCE.md)记录冷启动、单请求延迟分位数、分阶段耗时与并发扫描的测量方法，并明确标出哪些数字因与训练争抢 CPU 而无效；真实流量容量、延迟 SLO 与拒判质量仍然未验收。
 
 ## 旧实验：中文语音助理意图分类 SFT/DPO
 
