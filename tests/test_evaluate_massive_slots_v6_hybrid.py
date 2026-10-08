@@ -61,7 +61,7 @@ class V6HybridSafetyTests(unittest.TestCase):
             "confidence_threshold": v6.MEAN_LOGPROB_THRESHOLD,
             "generation": v6.GENERATION,
             "bootstrap": v6.BOOTSTRAP["test"],
-            "package_versions": v6.package_versions(),
+            "package_versions": {"torch": "synthetic-test-version"},
             **{key: "a" * 64 for key in (
                 "manifest_sha256", "train_file_sha256", "dev_file_sha256",
                 "test_file_sha256", "new_bio_model_sha256", "dev_report_sha256")},
