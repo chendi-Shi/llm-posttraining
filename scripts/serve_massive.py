@@ -46,6 +46,40 @@ class Classifier(Protocol):
     def predict(self, text: str, max_input_tokens: int) -> str: ...
 
 
+class SlotExtractor(Protocol):
+    """A four-slot extractor: returns one raw JSON answer per utterance."""
+
+    model_version: str
+
+    def extract(self, utterance: str, max_input_tokens: int) -> dict: ...
+
+
+def slot_report(utterance: str, result: dict, model_version: str, elapsed_ms: float) -> dict:
+    """Build the review-only slot response shared by every slot backend.
+
+    Slot values are verbatim copies of the source utterance and are not
+    calibrated for rejection, so the answer is always a review candidate.
+    """
+    from massive_slots import parse_prediction
+
+    slots, validity = parse_prediction(result["output"], utterance)
+    return {
+        # An unusable answer yields no slots rather than null, so callers can
+        # iterate the field without a type check.
+        "slots": slots or [],
+        "usable_for_review": bool(slots) and all(
+            validity[key] for key in ("json_valid", "schema_valid", "copy_valid")),
+        "abstained": True,
+        "reason": "rejection_not_calibrated",
+        "review_required": True,
+        "auto_execute": False,
+        "replaced_by_dpo": bool(result.get("replaced")),
+        "model_version": model_version,
+        "elapsed_ms": round(elapsed_ms, 3),
+    }
+
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -228,6 +262,10 @@ class IntentHTTPServer(ThreadingHTTPServer):
         self.max_body_bytes = max_body_bytes
         self.max_input_tokens = max_input_tokens
         self.timeout_seconds = timeout_seconds
+        # Generic inference settings. The intent service keeps using
+        # classify(); the slot service binds these to extract().
+        self.backend_callable = getattr(classifier, "extract", None) or classifier.predict
+        self.max_output_tokens: int | None = None
         self._inference_slot = threading.BoundedSemaphore(1)
         self._executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="intent-inference")
         self._state_lock = threading.Lock()
@@ -244,12 +282,22 @@ class IntentHTTPServer(ThreadingHTTPServer):
             return not self._timed_out_worker
 
     def classify(self, text: str) -> str:
+        return self._run_slot(lambda: self.backend_callable(text, self.max_input_tokens))
+
+    def run_slots(self, text: str) -> dict:
+        """Extract four slots for one utterance through the same inference slot."""
+        result = self._run_slot(lambda: self.backend_callable(text, self.max_input_tokens))
+        if not isinstance(result, dict) or "output" not in result:
+            raise RuntimeError("Slot backend returned an unexpected payload")
+        return result
+
+    def _run_slot(self, call):
         if not self.ready:
             raise ServiceUnavailable("A timed-out inference is still running")
         if not self._inference_slot.acquire(blocking=False):
             raise Busy("The inference worker is occupied")
         try:
-            future = self._executor.submit(self.classifier.predict, text, self.max_input_tokens)
+            future = self._executor.submit(call)
         except Exception:
             self._inference_slot.release()
             raise
@@ -312,7 +360,7 @@ class IntentHandler(BaseHTTPRequestHandler):
             self._error(404, "not_found", "Unknown route")
 
     def do_POST(self):
-        if self.path != "/v1/intents":
+        if self.path not in ("/v1/intents", "/v1/slots"):
             self._error(404, "not_found", "Unknown route")
             return
         if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
@@ -356,6 +404,9 @@ class IntentHandler(BaseHTTPRequestHandler):
         if len(text) > self.server.max_chars:
             self._error(413, "text_too_long", "text exceeds the character limit")
             return
+        if self.path == "/v1/slots":
+            self._post_slots(text)
+            return
 
         start = time.perf_counter()
         try:
@@ -387,6 +438,31 @@ class IntentHandler(BaseHTTPRequestHandler):
             "elapsed_ms": round((time.perf_counter() - start) * 1000, 3),
         })
 
+    def _post_slots(self, text: str):
+        """Review-only four-slot extraction over the same single inference slot."""
+        start = time.perf_counter()
+        try:
+            result = self.server.run_slots(text)
+        except InputTooLong as exc:
+            self._error(413, "prompt_too_long", str(exc))
+            return
+        except Busy as exc:
+            self._error(429, "busy", str(exc))
+            return
+        except ServiceUnavailable as exc:
+            self._error(503, "unavailable", str(exc))
+            return
+        except InferenceTimeout as exc:
+            self._error(504, "inference_timeout", str(exc))
+            return
+        except Exception:
+            self._error(500, "inference_failed", "Inference failed; inspect the local service log")
+            logging.exception("Slot inference raised an exception")
+            return
+        self._send_json(200, slot_report(
+            text, result, self.server.classifier.model_version,
+            (time.perf_counter() - start) * 1000))
+
     def log_message(self, format, *args):
         # BaseHTTPRequestHandler logs the route and status, not request text.
         super().log_message(format, *args)
@@ -396,12 +472,14 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Review-only local MASSIVE intent service")
     parser.add_argument("--host", choices=("127.0.0.1", "0.0.0.0"), default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
-    parser.add_argument("--backend", choices=("linear", "sft"), default="linear")
+    parser.add_argument("--backend", choices=("linear", "sft", "slots"), default="linear")
     parser.add_argument("--linear-model", type=Path, default=Path("outputs/massive-linear-baseline.joblib"))
     parser.add_argument("--expected-linear-sha256", default=LOCKED_LINEAR_SHA256)
     parser.add_argument("--model", type=Path, default=Path("models/Qwen2.5-0.5B-Instruct"))
     parser.add_argument("--adapter", type=Path, default=Path("outputs/massive-sft"))
     parser.add_argument("--labels", type=Path, default=Path("data/massive-zh/intents.json"))
+    parser.add_argument("--bio-model", type=Path, default=Path("outputs/massive-slots-v6-bio.joblib"))
+    parser.add_argument("--dpo-adapter", type=Path, default=Path("outputs/massive-slots-v4-balanced-dpo-64"))
     parser.add_argument("--max-chars", type=int, default=500)
     parser.add_argument("--max-body-bytes", type=int, default=4096)
     parser.add_argument("--max-input-tokens", type=int, default=512)
@@ -409,12 +487,19 @@ def parse_args():
     return parser.parse_args()
 
 
+def build_backend(args):
+    if args.backend == "linear":
+        return LinearIntentModel(args.linear_model, args.expected_linear_sha256)
+    if args.backend == "sft":
+        return IntentModel(args.model, args.adapter, args.labels)
+    from serve_massive_slots import SlotHybridModel
+
+    return SlotHybridModel(base=args.model, bio=args.bio_model, dpo=args.dpo_adapter)
+
+
 def main():
     args = parse_args()
-    if args.backend == "linear":
-        classifier = LinearIntentModel(args.linear_model, args.expected_linear_sha256)
-    else:
-        classifier = IntentModel(args.model, args.adapter, args.labels)
+    classifier = build_backend(args)
     with IntentHTTPServer(
         (args.host, args.port),
         classifier,
@@ -429,6 +514,7 @@ def main():
             "artifact_sha256": classifier.artifact_hashes,
             "backend": args.backend,
             "mode": "review_only",
+            "route": "/v1/slots" if args.backend == "slots" else "/v1/intents",
         }), flush=True)
         try:
             server.serve_forever(poll_interval=0.2)
