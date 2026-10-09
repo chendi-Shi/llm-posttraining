@@ -1,0 +1,955 @@
+{
+  "study": "MASSIVE zh-CN four-slot v6 secondary QLoRA SFT on the 1,600 training groups",
+  "role": "dev",
+  "scope": "development split only; the sealed v6 test split is not used",
+  "source_partition": "train",
+  "manifest_sha256": "7982b3760333a364ebf17c91556f9978b32811fdacc0321db3129b6abee41a70",
+  "eval_file_sha256": "6ee1812c5ac9a12e44047cd57e5973be606b9dcdf546d1d30ccf96f4ff1a157c",
+  "adapter": "C:\\Users\\Intern1\\OneDrive - Anatole Investment\\Documents\\ChatGPT\\晨曦私募\\llm-posttraining\\outputs\\massive-slots-v6-sft-1600-400",
+  "adapter_sha256": "a976347121e29aa55d8de765c4703944bedcc8da5e466a7941ca2741dcc8023a",
+  "adapter_run_manifest": {
+    "study": "MASSIVE zh-CN four-slot v6 secondary QLoRA SFT on the 1,600 training groups",
+    "status": "fixed_final_recipe",
+    "train_file": "C:\\Users\\Intern1\\OneDrive - Anatole Investment\\Documents\\ChatGPT\\晨曦私募\\llm-posttraining\\data\\massive-zh\\slots-v6\\train.jsonl",
+    "train_file_sha256": "ea1cd537dcfd924b24eec7997b692a42ae9df757c52f89c904358665ec06a3d3",
+    "v6_manifest_sha256": "7982b3760333a364ebf17c91556f9978b32811fdacc0321db3129b6abee41a70",
+    "model": "models/Qwen2.5-0.5B-Instruct",
+    "model_asset_sha256": {
+      "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+    },
+    "recipe": {
+      "max_steps": 400,
+      "max_length": 256,
+      "learning_rate": 0.0003,
+      "seed": 20261003,
+      "gradient_accumulation_steps": 4,
+      "per_device_train_batch_size": 1,
+      "save_steps": 100
+    },
+    "executed_max_steps": 400,
+    "resumed_from_checkpoint": "outputs\\massive-slots-v6-sft-1600-400\\checkpoint-300",
+    "mask_audit": {
+      "checked_examples": 1600,
+      "max_length": 256,
+      "min_prompt_tokens_masked": 86,
+      "min_completion_tokens_active": 6,
+      "max_total_tokens": 160
+    },
+    "training_seconds": 7852.76,
+    "global_step": 400,
+    "package_versions": {
+      "torch": "2.14.0+cpu",
+      "transformers": "5.17.0",
+      "trl": "1.13.0",
+      "peft": "0.21.0",
+      "bitsandbytes": "0.50.2"
+    }
+  },
+  "base_model_sha256": {
+    "model.safetensors": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+  },
+  "package_versions": {
+    "torch": "2.14.0+cpu",
+    "transformers": "5.17.0",
+    "peft": "0.21.0",
+    "trl": "1.13.0",
+    "bitsandbytes": "0.50.2",
+    "scikit-learn": "1.7.2",
+    "joblib": "1.6.0",
+    "numpy": "1.26.4"
+  },
+  "code_sha256": {
+    "scripts/train_massive_slots_v6_sft.py": "61af5390d6bc92113f2bb656b8b3de43e49c661c34724074c07ff25336c0c49c",
+    "scripts/evaluate_massive_slots_v6_sft.py": "b8dcb10fdddb1d69a27eb535de3d4979bd234af47bbffec17fa488c2cc552d3d",
+    "scripts/evaluate_massive_slots.py": "fb35417cab111ae1ffdbeab64ca90b065b845bb47e7289adc47b1beb6973755f",
+    "scripts/massive_slots.py": "25d1d5db439e003f25f3a784a358b0813fbdef74c862c1631178d175e53d08b5",
+    "scripts/common.py": "4a773310acf65aef774ada6920a52649519d35ccc9eb11a50888162cac51ce10"
+  },
+  "prediction_file_sha256": "6186ce77b763059267e76fcc270bf25f58f7c334ae9e3cdf68f2ad9184e387e9",
+  "generation": {
+    "decoding": "greedy_unconstrained",
+    "batch_size": 8,
+    "max_input_tokens": 256,
+    "max_new_tokens": 64,
+    "max_observed_input_tokens": 108
+  },
+  "bootstrap": {
+    "samples": 1000,
+    "seed": 20261003
+  },
+  "systems": {
+    "old_bio": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 106,
+        "micro": {
+          "tp": 59,
+          "fp": 47,
+          "fn": 47,
+          "precision": 0.5566037735849056,
+          "recall": 0.5566037735849056,
+          "f1": 0.5566037735849056
+        },
+        "micro_f1": 0.5566037735849056,
+        "per_type": {
+          "date": {
+            "tp": 35,
+            "fp": 17,
+            "fn": 15,
+            "precision": 0.6730769230769231,
+            "recall": 0.7,
+            "f1": 0.6862745098039216
+          },
+          "time": {
+            "tp": 10,
+            "fp": 15,
+            "fn": 6,
+            "precision": 0.4,
+            "recall": 0.625,
+            "f1": 0.4878048780487805
+          },
+          "place_name": {
+            "tp": 5,
+            "fp": 9,
+            "fn": 18,
+            "precision": 0.35714285714285715,
+            "recall": 0.21739130434782608,
+            "f1": 0.2702702702702703
+          },
+          "person": {
+            "tp": 9,
+            "fp": 6,
+            "fn": 8,
+            "precision": 0.6,
+            "recall": 0.5294117647058824,
+            "f1": 0.5625
+          }
+        },
+        "macro_f1": 0.5017124145307431,
+        "sentence_exact_accuracy": 0.7766666666666666,
+        "sentence_exact_count": 233,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 1.0,
+        "invalid_output_count": 0,
+        "error_counts": {},
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 18,
+        "no_slot_false_positive_rate": 0.08653846153846154,
+        "no_slot_invalid_output_count": 0,
+        "no_slot_failure_rate": 0.08653846153846154,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.4607920093488854,
+            0.6442464953271029
+          ],
+          "sentence_exact_ci95": [
+            0.73,
+            0.8266666666666667
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.6082474226804123,
+        "sentence_exact_accuracy": 0.4673913043478261
+      }
+    },
+    "new_bio": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 110,
+        "micro": {
+          "tp": 71,
+          "fp": 39,
+          "fn": 35,
+          "precision": 0.6454545454545455,
+          "recall": 0.6698113207547169,
+          "f1": 0.6574074074074074
+        },
+        "micro_f1": 0.6574074074074074,
+        "per_type": {
+          "date": {
+            "tp": 39,
+            "fp": 17,
+            "fn": 11,
+            "precision": 0.6964285714285714,
+            "recall": 0.78,
+            "f1": 0.7358490566037735
+          },
+          "time": {
+            "tp": 13,
+            "fp": 12,
+            "fn": 3,
+            "precision": 0.52,
+            "recall": 0.8125,
+            "f1": 0.6341463414634146
+          },
+          "place_name": {
+            "tp": 11,
+            "fp": 4,
+            "fn": 12,
+            "precision": 0.7333333333333333,
+            "recall": 0.4782608695652174,
+            "f1": 0.5789473684210527
+          },
+          "person": {
+            "tp": 8,
+            "fp": 6,
+            "fn": 9,
+            "precision": 0.5714285714285714,
+            "recall": 0.47058823529411764,
+            "f1": 0.5161290322580645
+          }
+        },
+        "macro_f1": 0.6162679496865764,
+        "sentence_exact_accuracy": 0.8433333333333334,
+        "sentence_exact_count": 253,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 1.0,
+        "invalid_output_count": 0,
+        "error_counts": {},
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 11,
+        "no_slot_false_positive_rate": 0.052884615384615384,
+        "no_slot_invalid_output_count": 0,
+        "no_slot_failure_rate": 0.052884615384615384,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.5675644248900062,
+            0.7476077749810219
+          ],
+          "sentence_exact_ci95": [
+            0.7966666666666666,
+            0.8833333333333333
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.696078431372549,
+        "sentence_exact_accuracy": 0.6086956521739131
+      }
+    },
+    "v4_dpo": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 215,
+        "micro": {
+          "tp": 71,
+          "fp": 144,
+          "fn": 35,
+          "precision": 0.3302325581395349,
+          "recall": 0.6698113207547169,
+          "f1": 0.4423676012461059
+        },
+        "micro_f1": 0.4423676012461059,
+        "per_type": {
+          "date": {
+            "tp": 39,
+            "fp": 49,
+            "fn": 11,
+            "precision": 0.4431818181818182,
+            "recall": 0.78,
+            "f1": 0.5652173913043478
+          },
+          "time": {
+            "tp": 3,
+            "fp": 7,
+            "fn": 13,
+            "precision": 0.3,
+            "recall": 0.1875,
+            "f1": 0.23076923076923078
+          },
+          "place_name": {
+            "tp": 15,
+            "fp": 41,
+            "fn": 8,
+            "precision": 0.26785714285714285,
+            "recall": 0.6521739130434783,
+            "f1": 0.379746835443038
+          },
+          "person": {
+            "tp": 14,
+            "fp": 47,
+            "fn": 3,
+            "precision": 0.22950819672131148,
+            "recall": 0.8235294117647058,
+            "f1": 0.358974358974359
+          }
+        },
+        "macro_f1": 0.3836769541227439,
+        "sentence_exact_accuracy": 0.4866666666666667,
+        "sentence_exact_count": 146,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 0.9933333333333333,
+        "copy_valid_rate": 0.9533333333333334,
+        "invalid_output_count": 14,
+        "error_counts": {
+          "invalid_slot_type_or_value": 2,
+          "value_not_copied_from_utterance": 12
+        },
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 104,
+        "no_slot_false_positive_rate": 0.5,
+        "no_slot_invalid_output_count": 11,
+        "no_slot_failure_rate": 0.5528846153846154,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.36824900793650794,
+            0.5170126671358198
+          ],
+          "sentence_exact_ci95": [
+            0.43333333333333335,
+            0.55
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.6635514018691588,
+        "sentence_exact_accuracy": 0.5760869565217391
+      }
+    },
+    "old_v5_hybrid": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 129,
+        "micro": {
+          "tp": 72,
+          "fp": 57,
+          "fn": 34,
+          "precision": 0.5581395348837209,
+          "recall": 0.6792452830188679,
+          "f1": 0.6127659574468085
+        },
+        "micro_f1": 0.6127659574468085,
+        "per_type": {
+          "date": {
+            "tp": 39,
+            "fp": 16,
+            "fn": 11,
+            "precision": 0.7090909090909091,
+            "recall": 0.78,
+            "f1": 0.7428571428571429
+          },
+          "time": {
+            "tp": 8,
+            "fp": 14,
+            "fn": 8,
+            "precision": 0.36363636363636365,
+            "recall": 0.5,
+            "f1": 0.42105263157894735
+          },
+          "place_name": {
+            "tp": 13,
+            "fp": 15,
+            "fn": 10,
+            "precision": 0.4642857142857143,
+            "recall": 0.5652173913043478,
+            "f1": 0.5098039215686274
+          },
+          "person": {
+            "tp": 12,
+            "fp": 12,
+            "fn": 5,
+            "precision": 0.5,
+            "recall": 0.7058823529411765,
+            "f1": 0.5853658536585366
+          }
+        },
+        "macro_f1": 0.5647698874158136,
+        "sentence_exact_accuracy": 0.78,
+        "sentence_exact_count": 234,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 1.0,
+        "invalid_output_count": 0,
+        "error_counts": {},
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 27,
+        "no_slot_false_positive_rate": 0.12980769230769232,
+        "no_slot_invalid_output_count": 0,
+        "no_slot_failure_rate": 0.12980769230769232,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.5277674129353234,
+            0.6894004702194357
+          ],
+          "sentence_exact_ci95": [
+            0.7333333333333333,
+            0.8233333333333334
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.6923076923076923,
+        "sentence_exact_accuracy": 0.5760869565217391
+      }
+    },
+    "new_hybrid": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 130,
+        "micro": {
+          "tp": 78,
+          "fp": 52,
+          "fn": 28,
+          "precision": 0.6,
+          "recall": 0.7358490566037735,
+          "f1": 0.6610169491525424
+        },
+        "micro_f1": 0.6610169491525424,
+        "per_type": {
+          "date": {
+            "tp": 39,
+            "fp": 18,
+            "fn": 11,
+            "precision": 0.6842105263157895,
+            "recall": 0.78,
+            "f1": 0.7289719626168224
+          },
+          "time": {
+            "tp": 11,
+            "fp": 10,
+            "fn": 5,
+            "precision": 0.5238095238095238,
+            "recall": 0.6875,
+            "f1": 0.5945945945945946
+          },
+          "place_name": {
+            "tp": 15,
+            "fp": 11,
+            "fn": 8,
+            "precision": 0.5769230769230769,
+            "recall": 0.6521739130434783,
+            "f1": 0.6122448979591837
+          },
+          "person": {
+            "tp": 13,
+            "fp": 13,
+            "fn": 4,
+            "precision": 0.5,
+            "recall": 0.7647058823529411,
+            "f1": 0.6046511627906976
+          }
+        },
+        "macro_f1": 0.6351156544903246,
+        "sentence_exact_accuracy": 0.81,
+        "sentence_exact_count": 243,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 1.0,
+        "invalid_output_count": 0,
+        "error_counts": {},
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 22,
+        "no_slot_false_positive_rate": 0.10576923076923077,
+        "no_slot_invalid_output_count": 0,
+        "no_slot_failure_rate": 0.10576923076923077,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.5821510883482715,
+            0.7333520599250936
+          ],
+          "sentence_exact_ci95": [
+            0.7633333333333333,
+            0.8533333333333334
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.7323943661971831,
+        "sentence_exact_accuracy": 0.6195652173913043
+      }
+    },
+    "v6_sft_1600_400": {
+      "metrics": {
+        "examples": 300,
+        "metric_definition": {
+          "entity_match": "multiset of (type, literal value) per utterance",
+          "invalid_output": "zero matched/predicted entities; sentence exact is false; validity reported separately",
+          "no_slot_false_positive": "valid output with one or more target slots on a gold-empty utterance",
+          "no_slot_failure": "invalid output or nonempty slots on a gold-empty utterance"
+        },
+        "gold_slot_count": 106,
+        "predicted_slot_count": 130,
+        "micro": {
+          "tp": 82,
+          "fp": 48,
+          "fn": 24,
+          "precision": 0.6307692307692307,
+          "recall": 0.7735849056603774,
+          "f1": 0.6949152542372882
+        },
+        "micro_f1": 0.6949152542372882,
+        "per_type": {
+          "date": {
+            "tp": 45,
+            "fp": 20,
+            "fn": 5,
+            "precision": 0.6923076923076923,
+            "recall": 0.9,
+            "f1": 0.782608695652174
+          },
+          "time": {
+            "tp": 10,
+            "fp": 9,
+            "fn": 6,
+            "precision": 0.5263157894736842,
+            "recall": 0.625,
+            "f1": 0.5714285714285714
+          },
+          "place_name": {
+            "tp": 16,
+            "fp": 10,
+            "fn": 7,
+            "precision": 0.6153846153846154,
+            "recall": 0.6956521739130435,
+            "f1": 0.6530612244897959
+          },
+          "person": {
+            "tp": 11,
+            "fp": 9,
+            "fn": 6,
+            "precision": 0.55,
+            "recall": 0.6470588235294118,
+            "f1": 0.5945945945945946
+          }
+        },
+        "macro_f1": 0.650423271541284,
+        "sentence_exact_accuracy": 0.8133333333333334,
+        "sentence_exact_count": 244,
+        "json_valid_rate": 1.0,
+        "schema_valid_rate": 1.0,
+        "copy_valid_rate": 0.99,
+        "invalid_output_count": 3,
+        "error_counts": {
+          "value_not_copied_from_utterance": 3
+        },
+        "no_slot_examples": 208,
+        "no_slot_false_positive_count": 28,
+        "no_slot_false_positive_rate": 0.1346153846153846,
+        "no_slot_invalid_output_count": 1,
+        "no_slot_failure_rate": 0.13942307692307693,
+        "bootstrap": {
+          "unit": "normalized_utterance_group",
+          "clusters": 300,
+          "samples": 1000,
+          "seed": 20261003,
+          "confidence": 0.95,
+          "micro_f1_ci95": [
+            0.6204362665585293,
+            0.7672618657401338
+          ],
+          "sentence_exact_ci95": [
+            0.77,
+            0.8567499999999999
+          ]
+        }
+      },
+      "positive_only": {
+        "examples": 92,
+        "micro_f1": 0.7884615384615384,
+        "sentence_exact_accuracy": 0.7065217391304348
+      }
+    }
+  },
+  "paired_f1": {
+    "new_bio_minus_old_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.5566037735849056,
+      "candidate_micro_f1": 0.6574074074074074,
+      "candidate_minus_baseline": 0.10080363382250179,
+      "delta_ci95": [
+        0.0216196708752981,
+        0.18123120235373497
+      ],
+      "bootstrap_probability_delta_positive": 0.991,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.7766666666666666,
+      "candidate_sentence_exact_accuracy": 0.8433333333333334,
+      "sentence_exact_candidate_minus_baseline": 0.06666666666666676,
+      "sentence_exact_delta_ci95": [
+        0.02658333333333334,
+        0.10674999999999993
+      ]
+    },
+    "v4_dpo_minus_old_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.5566037735849056,
+      "candidate_micro_f1": 0.4423676012461059,
+      "candidate_minus_baseline": -0.11423617233879974,
+      "delta_ci95": [
+        -0.21832406909906044,
+        -0.0045200258397932866
+      ],
+      "bootstrap_probability_delta_positive": 0.017,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.7766666666666666,
+      "candidate_sentence_exact_accuracy": 0.4866666666666667,
+      "sentence_exact_candidate_minus_baseline": -0.2899999999999999,
+      "sentence_exact_delta_ci95": [
+        -0.36,
+        -0.21666666666666667
+      ]
+    },
+    "old_v5_hybrid_minus_old_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.5566037735849056,
+      "candidate_micro_f1": 0.6127659574468085,
+      "candidate_minus_baseline": 0.05616218386190286,
+      "delta_ci95": [
+        -0.015509639751876242,
+        0.1326778284969644
+      ],
+      "bootstrap_probability_delta_positive": 0.939,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.7766666666666666,
+      "candidate_sentence_exact_accuracy": 0.78,
+      "sentence_exact_candidate_minus_baseline": 0.0033333333333334103,
+      "sentence_exact_delta_ci95": [
+        -0.03333333333333333,
+        0.04
+      ]
+    },
+    "new_hybrid_minus_old_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.5566037735849056,
+      "candidate_micro_f1": 0.6610169491525424,
+      "candidate_minus_baseline": 0.10441317556763674,
+      "delta_ci95": [
+        0.019614633279977575,
+        0.19393158926089682
+      ],
+      "bootstrap_probability_delta_positive": 0.989,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.7766666666666666,
+      "candidate_sentence_exact_accuracy": 0.81,
+      "sentence_exact_candidate_minus_baseline": 0.03333333333333344,
+      "sentence_exact_delta_ci95": [
+        -0.016666666666666666,
+        0.08333333333333333
+      ]
+    },
+    "v6_sft_1600_400_minus_old_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.5566037735849056,
+      "candidate_micro_f1": 0.6949152542372882,
+      "candidate_minus_baseline": 0.13831148065238252,
+      "delta_ci95": [
+        0.039883552203441135,
+        0.2466756024780254
+      ],
+      "bootstrap_probability_delta_positive": 0.998,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.7766666666666666,
+      "candidate_sentence_exact_accuracy": 0.8133333333333334,
+      "sentence_exact_candidate_minus_baseline": 0.036666666666666736,
+      "sentence_exact_delta_ci95": [
+        -0.016666666666666666,
+        0.09
+      ]
+    },
+    "v4_dpo_minus_new_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6574074074074074,
+      "candidate_micro_f1": 0.4423676012461059,
+      "candidate_minus_baseline": -0.21503980616130153,
+      "delta_ci95": [
+        -0.32838725678539243,
+        -0.10675471887679959
+      ],
+      "bootstrap_probability_delta_positive": 0.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.8433333333333334,
+      "candidate_sentence_exact_accuracy": 0.4866666666666667,
+      "sentence_exact_candidate_minus_baseline": -0.3566666666666667,
+      "sentence_exact_delta_ci95": [
+        -0.42,
+        -0.29
+      ]
+    },
+    "old_v5_hybrid_minus_new_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6574074074074074,
+      "candidate_micro_f1": 0.6127659574468085,
+      "candidate_minus_baseline": -0.04464144996059893,
+      "delta_ci95": [
+        -0.14009890857673057,
+        0.05299366840146976
+      ],
+      "bootstrap_probability_delta_positive": 0.191,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.8433333333333334,
+      "candidate_sentence_exact_accuracy": 0.78,
+      "sentence_exact_candidate_minus_baseline": -0.06333333333333335,
+      "sentence_exact_delta_ci95": [
+        -0.10666666666666667,
+        -0.02
+      ]
+    },
+    "new_hybrid_minus_new_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6574074074074074,
+      "candidate_micro_f1": 0.6610169491525424,
+      "candidate_minus_baseline": 0.0036095417451349476,
+      "delta_ci95": [
+        -0.07692568586071746,
+        0.08565949961985567
+      ],
+      "bootstrap_probability_delta_positive": 0.538,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.8433333333333334,
+      "candidate_sentence_exact_accuracy": 0.81,
+      "sentence_exact_candidate_minus_baseline": -0.033333333333333326,
+      "sentence_exact_delta_ci95": [
+        -0.06666666666666667,
+        0.0
+      ]
+    },
+    "v6_sft_1600_400_minus_new_bio": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6574074074074074,
+      "candidate_micro_f1": 0.6949152542372882,
+      "candidate_minus_baseline": 0.03750784682988073,
+      "delta_ci95": [
+        -0.05406572621896508,
+        0.13439028064738293
+      ],
+      "bootstrap_probability_delta_positive": 0.774,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.8433333333333334,
+      "candidate_sentence_exact_accuracy": 0.8133333333333334,
+      "sentence_exact_candidate_minus_baseline": -0.030000000000000027,
+      "sentence_exact_delta_ci95": [
+        -0.07333333333333333,
+        0.016666666666666666
+      ]
+    },
+    "old_v5_hybrid_minus_v4_dpo": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.4423676012461059,
+      "candidate_micro_f1": 0.6127659574468085,
+      "candidate_minus_baseline": 0.1703983562007026,
+      "delta_ci95": [
+        0.0973032277372278,
+        0.2470701566480796
+      ],
+      "bootstrap_probability_delta_positive": 1.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.4866666666666667,
+      "candidate_sentence_exact_accuracy": 0.78,
+      "sentence_exact_candidate_minus_baseline": 0.29333333333333333,
+      "sentence_exact_delta_ci95": [
+        0.23333333333333334,
+        0.3466666666666667
+      ]
+    },
+    "new_hybrid_minus_v4_dpo": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.4423676012461059,
+      "candidate_micro_f1": 0.6610169491525424,
+      "candidate_minus_baseline": 0.21864934790643648,
+      "delta_ci95": [
+        0.1420708988013638,
+        0.30269940628151537
+      ],
+      "bootstrap_probability_delta_positive": 1.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.4866666666666667,
+      "candidate_sentence_exact_accuracy": 0.81,
+      "sentence_exact_candidate_minus_baseline": 0.32333333333333336,
+      "sentence_exact_delta_ci95": [
+        0.2633333333333333,
+        0.3800833333333333
+      ]
+    },
+    "v6_sft_1600_400_minus_v4_dpo": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.4423676012461059,
+      "candidate_micro_f1": 0.6949152542372882,
+      "candidate_minus_baseline": 0.25254765299118226,
+      "delta_ci95": [
+        0.18307310117393513,
+        0.3181907881504281
+      ],
+      "bootstrap_probability_delta_positive": 1.0,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.4866666666666667,
+      "candidate_sentence_exact_accuracy": 0.8133333333333334,
+      "sentence_exact_candidate_minus_baseline": 0.32666666666666666,
+      "sentence_exact_delta_ci95": [
+        0.26666666666666666,
+        0.38333333333333336
+      ]
+    },
+    "new_hybrid_minus_old_v5_hybrid": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6127659574468085,
+      "candidate_micro_f1": 0.6610169491525424,
+      "candidate_minus_baseline": 0.04825099170573388,
+      "delta_ci95": [
+        0.002698979128926496,
+        0.0977732660772791
+      ],
+      "bootstrap_probability_delta_positive": 0.982,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.78,
+      "candidate_sentence_exact_accuracy": 0.81,
+      "sentence_exact_candidate_minus_baseline": 0.030000000000000027,
+      "sentence_exact_delta_ci95": [
+        0.0,
+        0.06333333333333334
+      ]
+    },
+    "v6_sft_1600_400_minus_old_v5_hybrid": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6127659574468085,
+      "candidate_micro_f1": 0.6949152542372882,
+      "candidate_minus_baseline": 0.08214929679047966,
+      "delta_ci95": [
+        0.004045807453416184,
+        0.16545422951194144
+      ],
+      "bootstrap_probability_delta_positive": 0.979,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.78,
+      "candidate_sentence_exact_accuracy": 0.8133333333333334,
+      "sentence_exact_candidate_minus_baseline": 0.033333333333333326,
+      "sentence_exact_delta_ci95": [
+        -0.01008333333333333,
+        0.07666666666666666
+      ]
+    },
+    "v6_sft_1600_400_minus_new_hybrid": {
+      "unit": "normalized_utterance_group",
+      "clusters": 300,
+      "samples": 1000,
+      "seed": 20261003,
+      "baseline_micro_f1": 0.6610169491525424,
+      "candidate_micro_f1": 0.6949152542372882,
+      "candidate_minus_baseline": 0.03389830508474578,
+      "delta_ci95": [
+        -0.0411238544228422,
+        0.10781596093044758
+      ],
+      "bootstrap_probability_delta_positive": 0.787,
+      "valid_bootstrap_draws": 1000,
+      "baseline_sentence_exact_accuracy": 0.81,
+      "candidate_sentence_exact_accuracy": 0.8133333333333334,
+      "sentence_exact_candidate_minus_baseline": 0.0033333333333332993,
+      "sentence_exact_delta_ci95": [
+        -0.04,
+        0.04666666666666667
+      ]
+    }
+  }
+}
