@@ -2,7 +2,7 @@
 
 本项目在约 16 GB 内存、无独立 GPU 的本机上运行 Qwen2.5-0.5B-Instruct 的 4-bit QLoRA SFT/DPO，并以字符 BIO 为同任务对照。数据来自许可清楚的 MASSIVE 中文子集；每轮固定训练、开发、测试的原句组和模型选择规则，公开聚合评测与失败案例分析。仓库不含原始数据、权重或逐题预测。
 
-**当前最重要的结果（v6，600 条新测试组）：**扩大 BIO 监督数据后的混合系统严格实体 F1 为 **62.59%**，相对旧混合系统的点估计高 **1.82 个百分点**，但配对 95% 区间为 **−3.58 至 +7.19**。因此预设的绝对 F1 门槛通过，**主要相对收益门槛未通过**；不能宣称可靠超越旧系统。[完整结论](reports/massive-slots-v6-study-summary.md)、[机器可读报告](reports/massive-slots-v6-test.json)和[复现说明](SLOT_V6_RUNBOOK.md)列出选择锁、文件指纹及限制。设计中的 1,600 组 QLoRA SFT 是独立的次级研究，只在开发集评估，不进入这组测试结论。
+**当前最重要的结果（v6，600 条新测试组）：**扩大 BIO 监督数据后的混合系统严格实体 F1 为 **62.59%**，相对旧混合系统的点估计高 **1.82 个百分点**，但配对 95% 区间为 **−3.58 至 +7.19**。因此预设的绝对 F1 门槛通过，**主要相对收益门槛未通过**；不能宣称可靠超越旧系统。[完整结论](reports/massive-slots-v6-study-summary.md)、[机器可读报告](reports/massive-slots-v6-test.json)和[复现说明](SLOT_V6_RUNBOOK.md)列出选择锁、文件指纹及限制。同 1,600 组 QLoRA SFT 的[次级开发集结果](reports/massive-slots-v6-sft-dev-summary.md)已单独报告，不进入这组测试结论。
 
 项目从 v1 四槽抽取起步：384 条训练、100 条开发、200 条确认，另有同量字符 BIO 基线。[v1 复现步骤](SLOT_RUNBOOK.md)、[训练环境清单](reports/massive-slots-training-provenance.json)和[研究报告](reports/massive-slots-study-summary.md)列出当时的结果。针对 v1 无槽误报，v2 SFT 与 v3 DPO 继续做纠错实验；v3 DPO 将无槽失败从 126/167 降至 28/167，但总体严格实体 F1 仅 47.12%，未达到预设门槛，两个旧确认集仍封存。[同样本继续 SFT 对照](reports/massive-slots-v3-matched-control-summary.md)展示新增数据与偏好目标的探索性比较。[项目展示页](PORTFOLIO_CASE_STUDY.md)和[岗位证据](JOB_APPLICATION.md)说明可写进简历的结果与边界。
 
@@ -40,7 +40,7 @@ SFT 相对未微调基座的确认集 F1 提升 **57.88 个百分点**（配对 
 
 **这是本项目四槽抽取首次达到预设绝对 F1 ≥60% 门槛；但 [v6 预设独立成功条件](SLOT_V6_RUNBOOK.md)还要求新混合相对旧 v5 混合的配对 95% 区间下界大于 0，实测差值为 +1.82 个百分点、区间 −3.58 至 +7.19，因此七项检查中六项通过、总体未通过。** 不能说 v6 复现并超过 v5，也不能称为 DPO 单模型提升或可自动上线。[完整结论](reports/massive-slots-v6-study-summary.md)与[复现步骤](SLOT_V6_RUNBOOK.md)保留边界。
 
-设计中的同 1,600 组 Qwen QLoRA SFT 次级实验另行进行，**固定配方与开发集评测[协议](reports/massive-slots-v6-sft-protocol.md)已单独固定**：它不进入主系统选型、不参与主验收，也不为它解封测试集，因此它的数字不能与上面的 62.59% 混在一起报告。
+同 1,600 组 Qwen QLoRA SFT 次级实验已完成固定 400 步训练与 300 条开发集评测：严格实体 F1 **69.49%**，比同组新 BIO 高 **3.75 个百分点**，但配对 95% 区间 **−5.41 至 +13.44** 跨 0；无槽失败 **29/208**，高于新 BIO 的 **11/208**。这只是[独立协议](reports/massive-slots-v6-sft-protocol.md)下的[开发集结果](reports/massive-slots-v6-sft-dev-summary.md)，不进入主系统选型、不参与主验收，也不解封测试集；不能与上面的 62.59% 测试成绩直接比较。
 
 ## 旧意图分类任务与人工复核服务
 
